@@ -1,4 +1,4 @@
-export { default as Home } from "./home";
-export { default as Product } from "./product";
-export { default as Recomendation } from "./recomendation";
-export { default as Cart } from "./cart";
+export { default as HomePage } from "./home-page";
+export { default as ProductPage } from "./product-page";
+export { default as RecomendationPage } from "./recomendation-page";
+export { default as CartPage } from "./cart-page";

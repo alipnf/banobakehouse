@@ -1,4 +1,4 @@
-const Recomendation = () => {
+const RecomendationPage = () => {
   return (
     <div>
       <h1>ini rekomenasi</h1>
@@ -6,4 +6,4 @@ const Recomendation = () => {
   );
 };
 
-export default Recomendation;
+export default RecomendationPage;
