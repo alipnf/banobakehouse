@@ -1,4 +1,4 @@
-const Cart = () => {
+const CartPage = () => {
   return (
     <div>
       <h1>ini cart</h1>
@@ -6,4 +6,4 @@ const Cart = () => {
   );
 };
 
-export default Cart;
+export default CartPage;
