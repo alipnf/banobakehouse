@@ -10,7 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@preline/theme-switch": "^2.5.2",
     "axios": "^1.7.9",
     "lucide-react": "^0.474.0",
     "preline": "^2.7.0",

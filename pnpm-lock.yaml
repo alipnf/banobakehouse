@@ -8,9 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@preline/theme-switch':
-        specifier: ^2.5.2
-        version: 2.5.2
       axios:
         specifier: ^1.7.9
         version: 1.7.9
@@ -403,9 +400,6 @@ packages:
 
   '@popperjs/core@2.11.8':
     resolution: {integrity: sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==}
-
-  '@preline/theme-switch@2.5.2':
-    resolution: {integrity: sha512-mhy8JNwXe3D61Axp3w/Bi1Yk4IACtnP3PQ1VeLR8dxpL0XTjROL4yl/YcTO3qPE90cVKkNAEqANwysmp/WuH+w==}
 
   '@rollup/rollup-android-arm-eabi@4.34.0':
     resolution: {integrity: sha512-Eeao7ewDq79jVEsrtWIj5RNqB8p2knlm9fhR6uJ2gqP7UfbLrTrxevudVrEPDM7Wkpn/HpRC2QfazH7MXLz3vQ==}
@@ -2069,8 +2063,6 @@ snapshots:
     optional: true
 
   '@popperjs/core@2.11.8': {}
-
-  '@preline/theme-switch@2.5.2': {}
 
   '@rollup/rollup-android-arm-eabi@4.34.0':
     optional: true
