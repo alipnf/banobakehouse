@@ -1,6 +1,6 @@
 const OrderPlatforms = () => {
   return (
-    <section className="bg-gray-50 pt-4">
+    <section className="bg-primary pt-4">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
@@ -12,10 +12,10 @@ const OrderPlatforms = () => {
         </div>
         <div className="mt-10 flex flex-wrap justify-center space-x-6">
           <button className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-black hover:bg-gray-800 transition-all duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-black">
-            GoFood
+            WhatsApp
           </button>
           <button className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-black hover:bg-gray-800 transition-all duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-black">
-            GrabFood
+            GoFood
           </button>
         </div>
       </div>
