@@ -1,9 +1,12 @@
-function App() {
+import { BrowserRouter } from "react-router-dom";
+import UserRoutes from "./routes/user-routes";
+
+const App = () => {
   return (
-    <>
-      <h1 className="text-red-900">hello world</h1>
-    </>
+    <BrowserRouter>
+      <UserRoutes />
+    </BrowserRouter>
   );
-}
+};
 
 export default App;
