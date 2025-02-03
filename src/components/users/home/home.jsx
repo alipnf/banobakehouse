@@ -6,7 +6,7 @@ import Testimoni from "./testimoni";
 
 const Home = () => {
   return (
-    <div className="pt-4 md:pt-6 lg:pt-10">
+    <div>
       <HeroSection />
       <CategoryList />
       <Testimoni />
