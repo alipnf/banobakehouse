@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@preline/collapse':
+        specifier: ^2.5.2
+        version: 2.5.2
       axios:
         specifier: ^1.7.9
         version: 1.7.9
@@ -403,6 +406,9 @@ packages:
 
   '@popperjs/core@2.11.8':
     resolution: {integrity: sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==}
+
+  '@preline/collapse@2.5.2':
+    resolution: {integrity: sha512-NIQ+obD0dnrEwxzsmi+DiUufu22tEo2p8v0Jz2Kdx2aqMwy4Dqkych4nBSoym03WF31FOmpnp7KcDk/YgC83kQ==}
 
   '@rollup/rollup-android-arm-eabi@4.34.0':
     resolution: {integrity: sha512-Eeao7ewDq79jVEsrtWIj5RNqB8p2knlm9fhR6uJ2gqP7UfbLrTrxevudVrEPDM7Wkpn/HpRC2QfazH7MXLz3vQ==}
@@ -2070,6 +2076,8 @@ snapshots:
     optional: true
 
   '@popperjs/core@2.11.8': {}
+
+  '@preline/collapse@2.5.2': {}
 
   '@rollup/rollup-android-arm-eabi@4.34.0':
     optional: true

@@ -4,7 +4,7 @@ import { ShoppingCart } from "lucide-react";
 const Navbar = () => {
   return (
     <header className="sticky top-0 inset-x-0 flex flex-wrap md:justify-start md:flex-nowrap z-50 w-full text-sm">
-      <nav className="mt-4 relative max-w-6xl md:backdrop-blur-xl bg-opacity-30 w-full bg-white border border-gray-200 rounded-[2rem] mx-2 py-2.5 md:flex md:items-center md:justify-between md:py-0 md:px-4 md:mx-auto dark:bg-neutral-900 dark:border-neutral-700">
+      <nav className="mt-4 relative max-w-6xl backdrop-blur-xl bg-opacity-30 w-full bg-white border border-gray-200 rounded-[2rem] mx-2 py-2.5 md:flex md:items-center md:justify-between md:py-0 md:px-4 md:mx-auto dark:bg-neutral-900 dark:border-neutral-700">
         <div className="px-4 md:px-0 flex justify-between items-center">
           <div className="flex items-center">
             <NavLink
@@ -19,7 +19,7 @@ const Navbar = () => {
           <div className="md:hidden">
             <button
               type="button"
-              className="hs-collapse-toggle flex justify-center items-center size-6 border border-gray-200 text-gray-500 rounded-full hover:bg-gray-200 focus:outline-none focus:bg-gray-200 dark:border-neutral-700 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+              className="hs-collapse-toggle flex justify-center items-center size-10 border border-gray-200 text-gray-500 rounded-full hover:bg-gray-200 focus:outline-none focus:bg-gray-200 dark:border-neutral-700 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
               id="hs-navbar-header-floating-collapse"
               aria-expanded="false"
               aria-controls="hs-navbar-header-floating"
