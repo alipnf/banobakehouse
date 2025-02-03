@@ -47,13 +47,13 @@ const categories = [
 
 const CategoryList = () => {
   return (
-    <section className="py-12 bg-gray-50">
+    <section className="py-12 bg-gray-50 dark:bg-dark">
       <div className="max-w-7xl mx-auto px-4">
         <div className="text-center">
-          <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+          <h2 className="text-3xl font-extrabold text-gray-900 dark:text-primary sm:text-4xl">
             Kategori
           </h2>
-          <p className="mt-4 text-xl text-gray-500">
+          <p className="mt-4 text-xl text-gray-500 dark:text-light">
             Beragam Kue Spesial untuk Semua Acara
           </p>
         </div>

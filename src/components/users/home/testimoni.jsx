@@ -53,12 +53,12 @@ const Testimoni = () => {
   ];
 
   return (
-    <div className="bg-primary mt-10 pt-4">
+    <div className="bg-light dark:bg-dark pt-4">
       <div className="text-center">
-        <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+        <h2 className="text-3xl font-extrabold dark:text-primary text-secondary sm:text-4xl">
           Apa Kata Pelanggan Kami
         </h2>
-        <p className="mt-4 text-xl text-gray-500">
+        <p className="mt-4 text-xl text-gray-500 dark:text-gray-300">
           Testimoni dari pelanggan setia BanoBakehouse
         </p>
       </div>
@@ -100,12 +100,16 @@ const Testimoni = () => {
                     className="w-24 h-24 rounded-full object-cover object-top relative top-14"
                     alt={item.name}
                   />
-                  <div className="bg-white shadow-lg rounded-xl w-80 h-96 flex flex-col justify-center items-center p-6 mt-2">
+                  <div className="bg-white dark:bg-gray-800 shadow-lg rounded-xl w-80 h-96 flex flex-col justify-center items-center p-6 mt-2">
                     <div className="text-center my-10">
-                      <p className="text-gray-700">{item.message}</p>
+                      <p className="text-gray-700 dark:text-gray-300">
+                        {item.message}
+                      </p>
                     </div>
                     <div className="text-center">
-                      <h1 className="font-bold text-2xl">{item.name}</h1>
+                      <h1 className="font-bold text-2xl text-gray-900 dark:text-white">
+                        {item.name}
+                      </h1>
                     </div>
                     {/* Star Rating */}
                     <div className="flex mt-4">

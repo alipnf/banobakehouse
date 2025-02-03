@@ -4,9 +4,11 @@ import { Outlet } from "react-router-dom";
 
 const UserLayout = () => {
   return (
-    <div className="px-4 sm:px-6 lg:px-12 max-w-7xl mx-auto w-full">
+    <div className="bg-light text-secondary dark:bg-dark dark:text-secondary-dark min-h-screen">
       <Navbar />
-      <Outlet />
+      <div className="px-4 sm:px-6 lg:px-12 max-w-7xl mx-auto w-full">
+        <Outlet />
+      </div>
       <Footer />
     </div>
   );

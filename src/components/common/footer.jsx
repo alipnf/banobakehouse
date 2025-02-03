@@ -3,7 +3,7 @@ import { Mail, Phone, MapPin } from "lucide-react";
 const Footer = () => {
   const currentYear = new Date().getFullYear();
   return (
-    <footer className="bg-white dark:bg-neutral-900 mt-16">
+    <footer className="bg-white dark:bg-neutral-900 mt-16 max-w-7xl mx-auto px-4">
       <div className="mx-auto py-8 sm:py-12">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {/* Brand Section */}
