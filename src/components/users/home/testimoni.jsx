@@ -53,7 +53,7 @@ const Testimoni = () => {
   ];
 
   return (
-    <div className="bg-primary">
+    <div className="bg-primary mt-10 pt-4">
       <div className="text-center">
         <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
           Apa Kata Pelanggan Kami
@@ -65,17 +65,23 @@ const Testimoni = () => {
 
       {/* Slider */}
       <div className="relative w-full mt-10">
-        <div className="md:w-4/5 w-full mx-auto h-fit">
+        <div className="w-full mx-auto h-fit">
           <Swiper
             modules={[Autoplay]}
-            spaceBetween={30}
-            slidesPerView={1}
             loop={true}
             speed={5000}
             breakpoints={{
               768: {
+                slidesPerView: 2,
+                spaceBetween: 20,
+              },
+              1024: {
                 slidesPerView: 3,
-                spaceBetween: 30,
+                spaceBetween: 20,
+              },
+              1440: {
+                slidesPerView: 4,
+                spaceBetween: 20,
               },
             }}
             autoplay={{
