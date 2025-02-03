@@ -34,9 +34,9 @@ const Faq = () => {
   ];
 
   return (
-    <div className="hs-accordion-group mt-5 pt-4">
+    <div className="hs-accordion-group mt-5 pt-4 max-w-7xl mx-auto px-4">
       <div className="text-center mb-12">
-        <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+        <h2 className="text-3xl font-extrabold dark:text-primary text-secondary sm:text-4xl">
           Pertanyaan yang Sering Diajukan
         </h2>
         <p className="mt-4 text-lg sm:text-xl text-gray-500">
@@ -50,7 +50,7 @@ const Faq = () => {
           id={`hs-basic-with-title-and-arrow-stretched-heading-${index + 1}`}
         >
           <button
-            className="hs-accordion-toggle hs-accordion-active:text-blue-600 py-3 inline-flex items-center justify-between gap-x-3 w-full font-semibold text-start text-gray-800 hover:text-gray-500 rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:hs-accordion-active:text-blue-500 dark:text-neutral-200 dark:hover:text-neutral-400 dark:focus:outline-none dark:focus:text-neutral-400"
+            className="hs-accordion-toggle py-3 inline-flex items-center justify-between gap-x-3 w-full font-semibold text-start text-gray-800 hover:text-gray-500 rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-200 dark:hover:text-neutral-400 dark:focus:outline-none dark:hs-accordion-active:text-white dark:focus:text-neutral-400"
             aria-expanded="false"
             aria-controls={`hs-basic-with-title-and-arrow-stretched-collapse-${index + 1}`}
           >
