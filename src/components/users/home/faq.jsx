@@ -1,4 +1,10 @@
+import { useEffect } from "react";
+
 const Faq = () => {
+  useEffect(() => {
+    window.dispatchEvent(new Event("load"));
+  }, []);
+
   const faqs = [
     {
       question: "Berapa lama waktu pemesanan yang dibutuhkan?",
