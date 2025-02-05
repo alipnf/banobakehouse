@@ -58,13 +58,28 @@ const Products = () => {
   return (
     <div className="min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex gap-8">
-          {/* Sidebar */}
-          <CategorySidebar categories={categories} />
+        <div className="flex flex-col md:flex-row gap-8">
+          {/* Mobile Dropdown */}
+          <div className="md:hidden">
+            <h2 className="text-sm font-medium text-gray-700 mb-2">
+              Kategori:
+            </h2>
+            <select className="w-full p-2 rounded-lg border border-gray-300 bg-white">
+              {categories.map((category, index) => (
+                <option key={index} value={category.name}>
+                  {category.name} ({category.count})
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Sidebar (Desktop) */}
+          <div className="hidden md:block w-64 flex-shrink-0">
+            <CategorySidebar categories={categories} />
+          </div>
 
           {/* Main Content */}
           <div className="flex-1">
-            {/* Search and Sort */}
             <SearchAndSort
               searchQuery={searchQuery}
               setSearchQuery={setSearchQuery}
@@ -72,17 +87,14 @@ const Products = () => {
               setSortBy={setSortBy}
             />
 
-            {/* Product Grid langsung di sini */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
               {products.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
             </div>
-
-            {/* Pagination */}
-            <Pagination />
           </div>
         </div>
+        <Pagination />
       </div>
     </div>
   );

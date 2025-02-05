@@ -1,6 +1,6 @@
 const Pagination = () => {
   return (
-    <div className="mt-8 flex justify-center">
+    <div className="mt-14 flex justify-center">
       <nav className="flex items-center gap-x-1" aria-label="Pagination">
         <button
           type="button"
