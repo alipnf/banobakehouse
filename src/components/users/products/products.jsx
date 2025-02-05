@@ -1,0 +1,91 @@
+import { CategorySidebar, Pagination, ProductCard, SearchAndSort } from "./";
+import { useState } from "react";
+
+const products = [
+  {
+    id: 1,
+    name: "Chocolate Heaven",
+    category: "Specialty",
+    price: 250000,
+    rating: 4.8,
+    reviews: 120,
+    image:
+      "https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-1.2.1&auto=format&fit=crop&w=1089&q=80",
+  },
+  {
+    id: 2,
+    name: "Strawberry Delight",
+    category: "Specialty",
+    price: 275000,
+    rating: 4.7,
+    reviews: 112,
+    image:
+      "https://images.unsplash.com/photo-1565958011703-44f9829ba187?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80",
+  },
+  {
+    id: 3,
+    name: "Wedding Classic",
+    category: "Wedding",
+    price: 1500000,
+    rating: 4.8,
+    reviews: 78,
+    image:
+      "https://images.unsplash.com/photo-1519654793190-2e8a4806f1f2?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80",
+  },
+  {
+    id: 4,
+    name: "Butter Cookies",
+    category: "Cookies",
+    price: 75000,
+    rating: 4.6,
+    reviews: 189,
+    image:
+      "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80",
+  },
+];
+
+const categories = [
+  { name: "Kue Ulang Tahun", count: 12 },
+  { name: "Kue Pernikahan", count: 8 },
+  { name: "Kue Kering", count: 15 },
+  { name: "Cupcakes", count: 20 },
+];
+
+const Products = () => {
+  const [sortBy, setSortBy] = useState("newest");
+  const [searchQuery, setSearchQuery] = useState("");
+
+  return (
+    <div className="min-h-screen">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex gap-8">
+          {/* Sidebar */}
+          <CategorySidebar categories={categories} />
+
+          {/* Main Content */}
+          <div className="flex-1">
+            {/* Search and Sort */}
+            <SearchAndSort
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              sortBy={sortBy}
+              setSortBy={setSortBy}
+            />
+
+            {/* Product Grid langsung di sini */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {products.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+
+            {/* Pagination */}
+            <Pagination />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Products;
