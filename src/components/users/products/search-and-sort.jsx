@@ -3,21 +3,28 @@ import { Search } from "lucide-react";
 const SearchAndSort = ({ searchQuery, setSearchQuery, sortBy, setSortBy }) => {
   return (
     <div className="flex justify-between items-center mb-6 gap-5">
+      {/* Search Bar */}
       <div className="relative flex-1 max-w-md">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-secondary/50 w-4 h-4" />
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-secondary/50 dark:text-primary/50 w-4 h-4" />
         <input
           type="text"
           placeholder="Cari kue favoritmu..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full pl-10 pr-4 py-2 border border-secondary/10 rounded-lg focus:outline-none focus:ring-1 focus:ring-secondary"
+          className="w-full pl-10 pr-4 py-2 border border-secondary/10 dark:border-primary/20 
+          rounded-lg focus:outline-none focus:ring-1 focus:ring-secondary dark:focus:ring-primary 
+          bg-light dark:bg-dark text-secondary dark:text-primary placeholder-secondary/50 dark:placeholder-primary/50"
         />
       </div>
+
+      {/* Sorting Dropdown */}
       <div className="flex items-center gap-4">
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value)}
-          className="border border-secondary/10 rounded-lg px-4 py-2 focus:outline-none focus:ring-1 focus:ring-secondary bg-light"
+          className="border border-secondary/10 dark:border-primary/20 rounded-lg px-4 py-2 
+          focus:outline-none focus:ring-1 focus:ring-secondary dark:focus:ring-primary 
+          bg-light dark:bg-dark text-secondary dark:text-primary"
         >
           <option value="price-low">Harga Terendah</option>
           <option value="price-high">Harga Tertinggi</option>

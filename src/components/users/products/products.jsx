@@ -52,8 +52,20 @@ const categories = [
 ];
 
 const Products = () => {
-  const [sortBy, setSortBy] = useState("newest");
+  const [sortBy, setSortBy] = useState("price-low");
   const [searchQuery, setSearchQuery] = useState("");
+
+  // Filter produk berdasarkan pencarian
+  const filteredProducts = products.filter((product) =>
+    product.name.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
+
+  // Sorting produk berdasarkan harga
+  const sortedProducts = [...filteredProducts].sort((a, b) => {
+    if (sortBy === "price-low") return a.price - b.price;
+    if (sortBy === "price-high") return b.price - a.price;
+    return 0;
+  });
 
   return (
     <div className="min-h-screen">
@@ -61,10 +73,10 @@ const Products = () => {
         <div className="flex flex-col md:flex-row gap-8">
           {/* Mobile Dropdown */}
           <div className="md:hidden">
-            <h2 className="text-sm font-medium text-gray-700 mb-2">
+            <h2 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Kategori:
             </h2>
-            <select className="w-full p-2 rounded-lg border border-gray-300 bg-white">
+            <select className="w-full p-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200">
               {categories.map((category, index) => (
                 <option key={index} value={category.name}>
                   {category.name} ({category.count})
@@ -88,9 +100,15 @@ const Products = () => {
             />
 
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
-              {products.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
+              {sortedProducts.length > 0 ? (
+                sortedProducts.map((product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))
+              ) : (
+                <p className="col-span-2 lg:col-span-3 text-center text-gray-600 dark:text-gray-300">
+                  Tidak ada produk yang ditemukan.
+                </p>
+              )}
             </div>
           </div>
         </div>
