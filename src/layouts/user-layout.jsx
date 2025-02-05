@@ -8,8 +8,8 @@ const UserLayout = () => {
       <Navbar />
       <div className="px-4 sm:px-6 lg:px-12 max-w-7xl mx-auto w-full">
         <Outlet />
+        <Footer />
       </div>
-      <Footer />
     </div>
   );
 };
