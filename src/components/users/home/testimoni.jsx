@@ -79,10 +79,6 @@ const Testimoni = () => {
                 slidesPerView: 3,
                 spaceBetween: 20,
               },
-              1440: {
-                slidesPerView: 4,
-                spaceBetween: 20,
-              },
             }}
             autoplay={{
               delay: 3000,
