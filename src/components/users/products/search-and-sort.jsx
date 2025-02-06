@@ -2,9 +2,9 @@ import { Search } from "lucide-react";
 
 const SearchAndSort = ({ searchQuery, setSearchQuery, sortBy, setSortBy }) => {
   return (
-    <div className="flex justify-between items-center mb-6 gap-5">
+    <div className="flex flex-col sm:flex-row justify-between items-center sm:gap-5 gap-3 w-full mb-6">
       {/* Search Bar */}
-      <div className="relative flex-1 max-w-md">
+      <div className="relative flex-1 w-full sm:max-w-md">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-secondary/50 dark:text-primary/50 w-4 h-4" />
         <input
           type="text"
@@ -18,11 +18,11 @@ const SearchAndSort = ({ searchQuery, setSearchQuery, sortBy, setSortBy }) => {
       </div>
 
       {/* Sorting Dropdown */}
-      <div className="flex items-center gap-4">
+      <div className="w-full sm:w-auto">
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value)}
-          className="border border-secondary/10 dark:border-primary/20 rounded-lg px-4 py-2 
+          className="w-full sm:w-auto border border-secondary/10 dark:border-primary/20 rounded-lg px-4 py-2 
           focus:outline-none focus:ring-1 focus:ring-secondary dark:focus:ring-primary 
           bg-light dark:bg-dark text-secondary dark:text-primary"
         >
