@@ -76,7 +76,7 @@ const Products = () => {
             <h2 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Kategori:
             </h2>
-            <select className="w-full p-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200">
+            <select className="w-full p-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-dark text-gray-700 dark:text-gray-200">
               {categories.map((category, index) => (
                 <option key={index} value={category.name}>
                   {category.name} ({category.count})
@@ -99,7 +99,7 @@ const Products = () => {
               setSortBy={setSortBy}
             />
 
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 md:gap-3 lg:gap-6">
               {sortedProducts.length > 0 ? (
                 sortedProducts.map((product) => (
                   <ProductCard key={product.id} product={product} />
