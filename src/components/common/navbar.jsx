@@ -1,5 +1,4 @@
 import { NavLink } from "react-router-dom";
-import { ShoppingCart } from "lucide-react";
 import ToggleTheme from "./toggle-theme";
 
 const Navbar = () => {
@@ -96,7 +95,7 @@ const Navbar = () => {
               Produk
             </NavLink>
             <NavLink
-              to="/rekomendasi"
+              to="/favorit"
               className={({ isActive }) =>
                 `py-0.5 md:py-3 px-4 md:px-1 border-s-2 md:border-s-0 md:border-b-2 ${
                   isActive
@@ -105,19 +104,7 @@ const Navbar = () => {
                 } focus:outline-none`
               }
             >
-              Rekomendasi
-            </NavLink>
-            <NavLink
-              to="/keranjang"
-              className={({ isActive }) =>
-                `py-0.5 md:py-3 px-4 md:px-1 border-s-2 md:border-s-0 md:border-b-2 ${
-                  isActive
-                    ? "border-gray-800 font-medium text-gray-800 dark:border-neutral-200 dark:text-neutral-200"
-                    : "border-transparent text-gray-600 hover:text-gray-800 dark:text-neutral-400 dark:hover:text-neutral-200"
-                } focus:outline-none`
-              }
-            >
-              <ShoppingCart className="size-4 text-gray-600 dark:text-neutral-400" />
+              Dafar Favorit
             </NavLink>
             <div className="hidden md:flex items-center gap-2">
               <ToggleTheme />
