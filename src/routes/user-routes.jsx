@@ -4,8 +4,7 @@ import {
   HomePage,
   ProductPage,
   ProductDetailPage,
-  RecomendationPage,
-  CartPage,
+  WishlistPage,
 } from "../pages/user";
 
 const UserRoutes = () => {
@@ -15,8 +14,7 @@ const UserRoutes = () => {
         <Route index element={<HomePage />} />
         <Route path="produk" element={<ProductPage />} />
         <Route path="produk/:id" element={<ProductDetailPage />} />
-        <Route path="rekomendasi" element={<RecomendationPage />} />
-        <Route path="keranjang" element={<CartPage />} />
+        <Route path="favorit" element={<WishlistPage />} />
       </Route>
     </Routes>
   );
