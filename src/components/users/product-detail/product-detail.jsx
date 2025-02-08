@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Star, Minus, Plus, ArrowLeft } from "lucide-react";
 import useProductStore from "../../../store/use-product-store";
 import { formatCurrency } from "../../../utils/format-currency";
@@ -10,6 +10,7 @@ const ProductDetail = () => {
   const [selectedSize, setSelectedSize] = useState("");
   const product = useProductStore((state) => state.selectedProduct);
   const { id } = useParams();
+  const navigate = useNavigate();
 
   if (!product || product.id !== Number(id)) {
     return <ProductNotFound />;
@@ -18,13 +19,13 @@ const ProductDetail = () => {
   return (
     <div className="min-h-screen bg-light dark:bg-dark py-6 md:py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <Link
-          to="/produk"
-          className="inline-flex items-center text-sm md:text-base text-secondary dark:text-light hover:text-secondary/70 dark:hover:text-light/70 mb-6 md:mb-8"
+        <button
+          onClick={() => navigate(-1)}
+          className="inline-flex items-center text-sm md:text-base text-secondary dark:text-light hover:text-secondary/70 dark:hover:text-light/70 mb-3 md:mb-4"
         >
-          <ArrowLeft className="w-4 h-4 md:w-5 md:h-5 mr-2" />
-          Kembali ke Produk
-        </Link>
+          <ArrowLeft className="w-2 h-2 md:w-5 md:h-5 mr-2" />
+          Kembali
+        </button>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
           {/* Image Section */}
