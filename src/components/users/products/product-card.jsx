@@ -11,7 +11,7 @@ const ProductCard = ({ product }) => {
 
   const handleClick = () => {
     setSelectedProduct(product);
-    navigate(`/produk/${product.id}`);
+    navigate(`/product/${product.id}`);
   };
 
   return (
