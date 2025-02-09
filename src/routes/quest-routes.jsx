@@ -5,7 +5,7 @@ import { LoginPage, RegisterPage } from "../pages/quest";
 const QuestRoutes = () => {
   return (
     <Routes>
-      <Route path="/" element={<QuestLayout />}>
+      <Route path="/auth" element={<QuestLayout />}>
         <Route path="login" element={<LoginPage />} />
         <Route path="register" element={<RegisterPage />} />
       </Route>

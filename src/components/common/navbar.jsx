@@ -83,7 +83,7 @@ const Navbar = () => {
               Beranda
             </NavLink>
             <NavLink
-              to="/produk"
+              to="/product"
               className={({ isActive }) =>
                 `py-0.5 md:py-3 px-4 md:px-1 border-s-2 md:border-s-0 md:border-b-2 ${
                   isActive
@@ -95,7 +95,7 @@ const Navbar = () => {
               Produk
             </NavLink>
             <NavLink
-              to="/favorit"
+              to="/wishlist"
               className={({ isActive }) =>
                 `py-0.5 md:py-3 px-4 md:px-1 border-s-2 md:border-s-0 md:border-b-2 ${
                   isActive
@@ -112,13 +112,13 @@ const Navbar = () => {
 
             <div className="flex items-center justify-center gap-2">
               <NavLink
-                to="/login"
+                to="/auth/login"
                 className="px-4 py-1.5 text-sm font-medium border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:border-neutral-600 dark:text-neutral-300 dark:hover:bg-neutral-700 dark:focus:ring-neutral-600"
               >
                 Masuk
               </NavLink>
               <NavLink
-                to="/register"
+                to="/auth/register"
                 className="px-4 py-1.5 text-sm font-medium text-white bg-secondary rounded-lg bg-focus:outline-none focus:ring-2 focus:ring-light dark:text-dark dark:focus:ring-dark dark:bg-light"
               >
                 Daftar

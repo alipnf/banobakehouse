@@ -11,7 +11,7 @@ const Login = () => {
             Belum punya akun?
             <Link
               className="text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500"
-              to="/register"
+              to="/auth/register"
             >
               Daftar di sini
             </Link>

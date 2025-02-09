@@ -12,9 +12,9 @@ const UserRoutes = () => {
     <Routes>
       <Route path="/" element={<UserLayout />}>
         <Route index element={<HomePage />} />
-        <Route path="produk" element={<ProductPage />} />
-        <Route path="produk/:id" element={<ProductDetailPage />} />
-        <Route path="favorit" element={<WishlistPage />} />
+        <Route path="product" element={<ProductPage />} />
+        <Route path="product/:id" element={<ProductDetailPage />} />
+        <Route path="wishlist" element={<WishlistPage />} />
       </Route>
     </Routes>
   );

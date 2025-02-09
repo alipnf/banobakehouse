@@ -12,7 +12,7 @@ const Register = () => {
             Sudah punya akun?
             <Link
               className="text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500"
-              to="/login"
+              to="/auth/login"
             >
               Masuk di sini
             </Link>
