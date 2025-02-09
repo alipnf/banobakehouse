@@ -104,10 +104,25 @@ const Navbar = () => {
                 } focus:outline-none`
               }
             >
-              Dafar Favorit
+              Daftar Favorit
             </NavLink>
             <div className="hidden md:flex items-center gap-2">
               <ToggleTheme />
+            </div>
+
+            <div className="flex items-center justify-center gap-2">
+              <NavLink
+                to="/login"
+                className="px-4 py-1.5 text-sm font-medium border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:border-neutral-600 dark:text-neutral-300 dark:hover:bg-neutral-700 dark:focus:ring-neutral-600"
+              >
+                Masuk
+              </NavLink>
+              <NavLink
+                to="/register"
+                className="px-4 py-1.5 text-sm font-medium text-white bg-secondary rounded-lg bg-focus:outline-none focus:ring-2 focus:ring-light dark:text-dark dark:focus:ring-dark dark:bg-light"
+              >
+                Daftar
+              </NavLink>
             </div>
           </div>
         </div>
