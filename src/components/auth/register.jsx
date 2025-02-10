@@ -1,6 +1,46 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import {
+  handleEmailRegister,
+  handleGoogleLogin,
+} from "../../services/firebase/auth-services";
 
 const Register = () => {
+  const navigate = useNavigate();
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+
+  const password = watch("password", "");
+
+  const onSubmit = async (data) => {
+    if (data.password !== data.confirmPassword) {
+      alert("Password dan Konfirmasi Password tidak cocok");
+      return;
+    }
+
+    try {
+      await handleEmailRegister(data.email, data.password);
+      navigate("/auth/login");
+    } catch (error) {
+      console.error("Error saat registrasi:", error);
+      alert("Gagal mendaftar. Silahkan coba lagi.");
+    }
+  };
+
+  const onGoogleRegister = async () => {
+    const role = await handleGoogleLogin();
+    if (role === "admin") {
+      navigate("/dashboard");
+    } else {
+      navigate("/");
+    }
+  };
+
   return (
     <div className="mt-7 bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-neutral-900 dark:border-neutral-700 max-w-sm mx-auto">
       <div className="p-4 sm:p-7">
@@ -9,7 +49,7 @@ const Register = () => {
             Daftar
           </h1>
           <p className="mt-2 text-sm text-gray-600 dark:text-neutral-400">
-            Sudah punya akun?
+            Sudah punya akun?{" "}
             <Link
               className="text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500"
               to="/auth/login"
@@ -22,7 +62,8 @@ const Register = () => {
         <div className="mt-5">
           <button
             type="button"
-            className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
+            className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800"
+            onClick={onGoogleRegister}
           >
             <svg
               className="w-4 h-auto"
@@ -55,7 +96,7 @@ const Register = () => {
             Atau
           </div>
 
-          <form>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div className="grid gap-y-4">
               <div>
                 <label
@@ -67,11 +108,22 @@ const Register = () => {
                 <input
                   type="email"
                   id="email"
-                  name="email"
+                  {...register("email", {
+                    required: "Email wajib diisi",
+                    pattern: {
+                      value: /\S+@\S+\.\S+/,
+                      message: "Format email tidak valid",
+                    },
+                  })}
                   className="py-3 px-4 block w-full border-2 border-gray-200 rounded-lg text-sm dark:bg-neutral-900 dark:border-neutral-500 dark:text-neutral-400 dark:placeholder-neutral-500"
-                  required
                 />
+                {errors.email && (
+                  <p className="text-xs text-red-600 mt-2">
+                    {errors.email.message}
+                  </p>
+                )}
               </div>
+
               <div>
                 <label
                   htmlFor="password"
@@ -82,26 +134,46 @@ const Register = () => {
                 <input
                   type="password"
                   id="password"
-                  name="password"
+                  {...register("password", {
+                    required: "Password wajib diisi",
+                    minLength: {
+                      value: 8,
+                      message: "Minimal 8 karakter",
+                    },
+                  })}
                   className="py-3 px-4 block w-full border-2 border-gray-200 rounded-lg text-sm dark:bg-neutral-900 dark:border-neutral-500 dark:text-neutral-400 dark:placeholder-neutral-500"
-                  required
                 />
+                {errors.password && (
+                  <p className="text-xs text-red-600 mt-2">
+                    {errors.password.message}
+                  </p>
+                )}
               </div>
+
               <div>
                 <label
-                  htmlFor="confirm-password"
+                  htmlFor="confirmPassword"
                   className="block text-sm mb-2 dark:text-white"
                 >
                   Konfirmasi Kata Sandi
                 </label>
                 <input
                   type="password"
-                  id="confirm-password"
-                  name="confirm-password"
+                  id="confirmPassword"
+                  {...register("confirmPassword", {
+                    required: "Konfirmasi password wajib diisi",
+                    validate: (value) =>
+                      value === password || "Password tidak cocok",
+                  })}
                   className="py-3 px-4 block w-full border-2 border-gray-200 rounded-lg text-sm dark:bg-neutral-900 dark:border-neutral-500 dark:text-neutral-400 dark:placeholder-neutral-500"
-                  required
                 />
+                {errors.confirmPassword && (
+                  <p className="text-xs text-red-600 mt-2">
+                    {errors.confirmPassword.message}
+                  </p>
+                )}
               </div>
+
               <button
                 type="submit"
                 className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg bg-secondary text-white hover:bg-dark focus:outline-none dark:bg-light dark:text-dark"

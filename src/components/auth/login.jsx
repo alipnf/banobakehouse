@@ -1,5 +1,36 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import {
+  handleGoogleLogin,
+  handleEmailLogin,
+} from "../../services/firebase/auth-services";
+
 const Login = () => {
+  const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = async (data) => {
+    const role = await handleEmailLogin(data.email, data.password);
+    if (role === "admin") {
+      navigate("/dashboard");
+    } else {
+      navigate("/");
+    }
+  };
+
+  const onGoogleLogin = async () => {
+    const role = await handleGoogleLogin();
+    if (role === "admin") {
+      navigate("/dashboard");
+    } else {
+      navigate("/");
+    }
+  };
+
   return (
     <div className="mt-7 bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-neutral-900 dark:border-neutral-700 max-w-sm mx-auto">
       <div className="p-4 sm:p-7">
@@ -8,7 +39,7 @@ const Login = () => {
             Masuk
           </h1>
           <p className="mt-2 text-sm text-gray-600 dark:text-neutral-400">
-            Belum punya akun?
+            Belum punya akun?{" "}
             <Link
               className="text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500"
               to="/auth/register"
@@ -21,7 +52,8 @@ const Login = () => {
         <div className="mt-5">
           <button
             type="button"
-            className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
+            className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800"
+            onClick={onGoogleLogin}
           >
             <svg
               className="w-4 h-auto"
@@ -50,11 +82,11 @@ const Login = () => {
             Masuk dengan Google
           </button>
 
-          <div className="py-3 flex items-center text-xs text-gray-400 uppercase before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6 dark:text-neutral-500 dark:before:border-neutral-600 dark:after:border-neutral-600">
+          <div className="py-3 flex items-center text-xs text-gray-400 uppercase before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6 dark:text-neutral-500">
             Atau
           </div>
 
-          <form>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div className="grid gap-y-4">
               <div>
                 <label
@@ -63,54 +95,51 @@ const Login = () => {
                 >
                   Alamat Email
                 </label>
-                <div className="relative">
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    className="py-3 px-4 block w-full border-2 border-gray-200 rounded-lg text-sm focus:border-primary focus:ring-primary disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-500 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
-                    required
-                    aria-describedby="email-error"
-                  />
-                </div>
-                <p
-                  className="hidden text-xs text-red-600 mt-2"
-                  id="email-error"
-                >
-                  Harap masukkan alamat email yang valid
-                </p>
+                <input
+                  type="email"
+                  id="email"
+                  {...register("email", {
+                    required: "Email wajib diisi",
+                    pattern: {
+                      value: /\S+@\S+\.\S+/,
+                      message: "Format email tidak valid",
+                    },
+                  })}
+                  className="py-3 px-4 block w-full border-2 border-gray-200 rounded-lg text-sm focus:border-primary focus:ring-primary dark:bg-neutral-900 dark:border-neutral-500 dark:text-neutral-400 dark:focus:ring-neutral-600"
+                />
+                {errors.email && (
+                  <p className="text-xs text-red-600 mt-2">
+                    {errors.email.message}
+                  </p>
+                )}
               </div>
 
               <div>
-                <div className="flex justify-between items-center">
-                  <label
-                    htmlFor="password"
-                    className="block text-sm mb-2 dark:text-white"
-                  >
-                    Kata Sandi
-                  </label>
-                </div>
-                <div className="relative">
-                  <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    className="py-3 px-4 block w-full border-2 border-gray-200 rounded-lg text-sm focus:border-primary focus:ring-primary disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-500 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
-                    required
-                    aria-describedby="password-error"
-                  />{" "}
-                </div>
-                <p
-                  className="hidden text-xs text-red-600 mt-2"
-                  id="password-error"
+                <label
+                  htmlFor="password"
+                  className="block text-sm mb-2 dark:text-white"
                 >
-                  Kata sandi harus minimal 8 karakter
-                </p>
+                  Kata Sandi
+                </label>
+                <input
+                  type="password"
+                  id="password"
+                  {...register("password", {
+                    required: "Password wajib diisi",
+                    minLength: { value: 8, message: "Minimal 8 karakter" },
+                  })}
+                  className="py-3 px-4 block w-full border-2 border-gray-200 rounded-lg text-sm focus:border-primary focus:ring-primary dark:bg-neutral-900 dark:border-neutral-500 dark:text-neutral-400 dark:focus:ring-neutral-600"
+                />
+                {errors.password && (
+                  <p className="text-xs text-red-600 mt-2">
+                    {errors.password.message}
+                  </p>
+                )}
               </div>
 
               <button
                 type="submit"
-                className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg bg-secondary text-white hover:bg-dark focus:outline-none dark:bg-light dark:text-dark"
+                className="w-full py-3 px-4 text-sm font-medium rounded-lg bg-secondary text-white hover:bg-dark focus:outline-none dark:bg-light dark:text-dark"
               >
                 Masuk
               </button>
