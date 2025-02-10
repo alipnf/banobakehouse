@@ -1,12 +1,14 @@
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Routes } from "react-router-dom";
 import UserRoutes from "./routes/user-routes";
 import QuestRoutes from "./routes/quest-routes";
 
 const App = () => {
   return (
     <BrowserRouter>
-      <UserRoutes />
-      <QuestRoutes />
+      <Routes>
+        {UserRoutes()}
+        {QuestRoutes()}
+      </Routes>
     </BrowserRouter>
   );
 };
