@@ -1,7 +1,11 @@
 import { NavLink } from "react-router-dom";
 import ToggleTheme from "./toggle-theme";
+import useAuthStore from "../../store/use-auth-store";
+import { handleLogout } from "../../services/firebase/auth-services";
 
 const Navbar = () => {
+  const { user } = useAuthStore();
+
   return (
     <header className="sticky top-0 inset-x-0 flex flex-wrap md:justify-start md:flex-nowrap z-50 w-full text-sm">
       <nav className="mt-4 relative max-w-6xl backdrop-blur-xl bg-opacity-30 w-full bg-white border border-gray-200 rounded-[2rem] mx-2 py-2.5 md:flex md:items-center md:justify-between md:py-0 md:px-4 md:mx-auto dark:bg-neutral-900 dark:border-neutral-700">
@@ -111,18 +115,34 @@ const Navbar = () => {
             </div>
 
             <div className="flex items-center justify-center gap-2">
-              <NavLink
-                to="/auth/login"
-                className="px-4 py-1.5 text-sm font-medium border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:border-neutral-600 dark:text-neutral-300 dark:hover:bg-neutral-700 dark:focus:ring-neutral-600"
-              >
-                Masuk
-              </NavLink>
-              <NavLink
-                to="/auth/register"
-                className="px-4 py-1.5 text-sm font-medium text-white bg-secondary rounded-lg bg-focus:outline-none focus:ring-2 focus:ring-light dark:text-dark dark:focus:ring-dark dark:bg-light"
-              >
-                Daftar
-              </NavLink>
+              {user ? (
+                <div className="flex items-center gap-3">
+                  <span className="text-gray-700 dark:text-neutral-300">
+                    {user.displayName || user.email}
+                  </span>
+                  <button
+                    onClick={handleLogout}
+                    className="px-4 py-1.5 text-sm font-medium text-white bg-secondary rounded-lg dark:bg-light dark:text-dark"
+                  >
+                    Logout
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <NavLink
+                    to="/auth/login"
+                    className="px-4 py-1.5 text-sm font-medium border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 dark:border-neutral-600 dark:text-neutral-300 dark:hover:bg-neutral-700"
+                  >
+                    Masuk
+                  </NavLink>
+                  <NavLink
+                    to="/auth/register"
+                    className="px-4 py-1.5 text-sm font-medium text-white bg-secondary rounded-lg dark:bg-light dark:text-dark"
+                  >
+                    Daftar
+                  </NavLink>
+                </>
+              )}
             </div>
           </div>
         </div>
