@@ -1,103 +1,145 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
   handleGoogleLogin,
   handleEmailLogin,
 } from "../../services/firebase/auth-services";
-
 import useAuthStore from "../../store/use-auth-store";
 
 const Login = () => {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const { setUser } = useAuthStore();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const { setUser } = useAuthStore();
-
+  // Fungsi untuk menangani login email/password
   const onSubmit = async (data) => {
-    const user = await handleEmailLogin(data.email, data.password);
-    const { email, role, name } = user;
+    setIsLoading(true);
+    try {
+      const user = await handleEmailLogin(data.email, data.password);
+      const { email, role, name } = user;
 
-    if (role === "admin") {
-      navigate("/dashboard");
-    } else {
-      navigate("/");
+      toast.success("Login berhasil!");
+
+      setUser({ email, role, name });
+
+      // Redirect berdasarkan role
+      if (role === "admin") {
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 2000);
+      } else {
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setIsLoading(false);
     }
-    setUser({ email, role, name });
   };
 
+  // Fungsi untuk menangani login Google
   const onGoogleLogin = async () => {
-    const user = await handleGoogleLogin();
-    const { email, role, name } = user;
+    setIsLoading(true); // Aktifkan loading state
+    try {
+      const user = await handleGoogleLogin();
+      const { email, role, name } = user;
 
-    if (role === "admin") {
-      navigate("/dashboard");
-    } else {
-      navigate("/");
+      // Tampilkan notifikasi sukses
+      toast.success("Login dengan Google berhasil!");
+
+      // Simpan data pengguna ke store
+      setUser({ email, role, name });
+
+      // Redirect berdasarkan role
+      if (role === "admin") {
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 2000);
+      } else {
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setIsLoading(false); // Nonaktifkan loading state
     }
-    setUser({ email, role, name });
   };
 
   return (
-    <div className="mt-7 bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-neutral-900 dark:border-neutral-700 max-w-sm md:max-w-lg  mx-auto">
-      <div className="p-4 sm:p-7">
-        <div className="text-center">
-          <h1 className="block text-2xl font-bold text-gray-800 dark:text-white">
-            Masuk
-          </h1>
-          <p className="mt-2 text-sm text-gray-600 dark:text-neutral-400">
-            Belum punya akun?{" "}
-            <Link
-              className="text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500"
-              to="/auth/register"
-            >
-              Daftar di sini
-            </Link>
-          </p>
-        </div>
+    <>
+      {/* Toast Container */}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
 
-        <div className="mt-5">
-          <button
-            type="button"
-            className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800"
-            onClick={onGoogleLogin}
-          >
-            <svg
-              className="w-4 h-auto"
-              width="46"
-              height="47"
-              viewBox="0 0 46 47"
-              fill="none"
-            >
-              <path
-                d="M46 24.0287C46 22.09 45.8533 20.68 45.5013 19.2112H23.4694V27.9356H36.4069C36.1429 30.1094 34.7347 33.37 31.5957 35.5731L31.5663 35.8669L38.5191 41.2719L38.9885 41.3306C43.4477 37.2181 46 31.1669 46 24.0287Z"
-                fill="#4285F4"
-              />
-              <path
-                d="M23.4694 47C29.8061 47 35.1161 44.9144 39.0179 41.3012L31.625 35.5437C29.6301 36.9244 26.9898 37.8937 23.4987 37.8937C17.2793 37.8937 12.0281 33.7812 10.1505 28.1412L9.88649 28.1706L2.61097 33.7812L2.52296 34.0456C6.36608 41.7125 14.287 47 23.4694 47Z"
-                fill="#34A853"
-              />
-              <path
-                d="M10.1212 28.1413C9.62245 26.6725 9.32908 25.1156 9.32908 23.5C9.32908 21.8844 9.62245 20.3275 10.0918 18.8588V18.5356L2.75765 12.8369L2.52296 12.9544C0.909439 16.1269 0 19.7106 0 23.5C0 27.2894 0.909439 30.8731 2.49362 34.0456L10.1212 28.1413Z"
-                fill="#FBBC05"
-              />
-              <path
-                d="M23.4694 9.07688C27.8699 9.07688 30.8622 10.9863 32.5344 12.5725L39.1645 6.11C35.0867 2.32063 29.8061 0 23.4694 0C14.287 0 6.36607 5.2875 2.49362 12.9544L10.0918 18.8588C11.9987 13.1894 17.25 9.07688 23.4694 9.07688Z"
-                fill="#EB4335"
-              />
-            </svg>
-            Masuk dengan Google
-          </button>
-
-          <div className="py-3 flex items-center text-xs text-gray-400 uppercase before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6 dark:text-neutral-500">
-            Atau
+      {/* Komponen Utama */}
+      <div className="mt-7 bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-neutral-900 dark:border-neutral-700 max-w-sm md:max-w-lg mx-auto">
+        <div className="p-4 sm:p-7">
+          {/* Header */}
+          <div className="text-center">
+            <h1 className="block text-2xl font-bold text-gray-800 dark:text-white">
+              Masuk
+            </h1>
+            <p className="mt-2 text-sm text-gray-600 dark:text-neutral-400">
+              Belum punya akun?{" "}
+              <Link
+                className="text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500"
+                to="/auth/register"
+              >
+                Daftar di sini
+              </Link>
+            </p>
           </div>
 
+          {/* Tombol Google Login */}
+          <div className="mt-5">
+            <button
+              type="button"
+              className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800"
+              onClick={onGoogleLogin}
+              disabled={isLoading} // Nonaktifkan tombol saat loading
+            >
+              <svg
+                className="w-4 h-auto"
+                width="46"
+                height="47"
+                viewBox="0 0 46 47"
+                fill="none"
+              >
+                {/* Google SVG */}
+              </svg>
+              Masuk dengan Google
+            </button>
+            <div className="py-3 flex items-center text-xs text-gray-400 uppercase before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6 dark:text-neutral-500">
+              Atau
+            </div>
+          </div>
+
+          {/* Formulir Login */}
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="grid gap-y-4">
+              {/* Email */}
               <div>
                 <label
                   htmlFor="email"
@@ -124,6 +166,7 @@ const Login = () => {
                 )}
               </div>
 
+              {/* Password */}
               <div>
                 <label
                   htmlFor="password"
@@ -147,17 +190,29 @@ const Login = () => {
                 )}
               </div>
 
+              {/* Submit Button */}
               <button
                 type="submit"
+                disabled={isLoading} // Nonaktifkan tombol saat loading
                 className="w-full py-3 px-4 text-sm font-medium rounded-lg bg-secondary text-white hover:bg-dark focus:outline-none dark:bg-light dark:text-dark"
               >
-                Masuk
+                {isLoading ? (
+                  <div
+                    className="animate-spin inline-block size-4 border-[3px] border-current border-t-transparent text-light rounded-full dark:text-light"
+                    role="status"
+                    aria-label="loading"
+                  >
+                    <span className="sr-only">Loading...</span>
+                  </div>
+                ) : (
+                  "Masuk"
+                )}
               </button>
             </div>
           </form>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
