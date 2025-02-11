@@ -24,6 +24,7 @@ const Login = () => {
 
   const onGoogleLogin = async () => {
     const role = await handleGoogleLogin();
+    console.log(role);
     if (role === "admin") {
       navigate("/dashboard");
     } else {
@@ -32,7 +33,7 @@ const Login = () => {
   };
 
   return (
-    <div className="mt-7 bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-neutral-900 dark:border-neutral-700 max-w-sm mx-auto">
+    <div className="mt-7 bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-neutral-900 dark:border-neutral-700 max-w-sm md:max-w-lg  mx-auto">
       <div className="p-4 sm:p-7">
         <div className="text-center">
           <h1 className="block text-2xl font-bold text-gray-800 dark:text-white">
