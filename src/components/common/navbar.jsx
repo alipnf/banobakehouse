@@ -1,7 +1,6 @@
 import { NavLink } from "react-router-dom";
 import ToggleTheme from "./toggle-theme";
 import useAuthStore from "../../store/use-auth-store";
-import { handleLogout } from "../../services/firebase/auth-services";
 
 const NavItem = ({ to, children }) => (
   <NavLink
@@ -19,7 +18,8 @@ const NavItem = ({ to, children }) => (
 );
 
 const Navbar = () => {
-  const { user } = useAuthStore();
+  const { user, signOut } = useAuthStore();
+  console.log(user);
 
   return (
     <header className="sticky top-0 inset-x-0 flex flex-wrap md:justify-start md:flex-nowrap z-50 w-full text-sm">
@@ -81,10 +81,10 @@ const Navbar = () => {
               {user ? (
                 <div className="flex items-center gap-3">
                   <span className="text-gray-700 dark:text-neutral-300">
-                    {user.displayName || user.email}
+                    {user.name || user.email}
                   </span>
                   <button
-                    onClick={handleLogout}
+                    onClick={signOut}
                     className="px-4 py-1.5 text-sm font-medium text-white bg-secondary rounded-lg dark:bg-light dark:text-dark"
                   >
                     Logout

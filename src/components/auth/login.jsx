@@ -5,6 +5,8 @@ import {
   handleEmailLogin,
 } from "../../services/firebase/auth-services";
 
+import useAuthStore from "../../store/use-auth-store";
+
 const Login = () => {
   const navigate = useNavigate();
   const {
@@ -13,23 +15,30 @@ const Login = () => {
     formState: { errors },
   } = useForm();
 
+  const { setUser } = useAuthStore();
+
   const onSubmit = async (data) => {
-    const role = await handleEmailLogin(data.email, data.password);
+    const user = await handleEmailLogin(data.email, data.password);
+    const { email, role, name } = user;
+
     if (role === "admin") {
       navigate("/dashboard");
     } else {
       navigate("/");
     }
+    setUser({ email, role, name });
   };
 
   const onGoogleLogin = async () => {
-    const role = await handleGoogleLogin();
-    console.log(role);
+    const user = await handleGoogleLogin();
+    const { email, role, name } = user;
+
     if (role === "admin") {
       navigate("/dashboard");
     } else {
       navigate("/");
     }
+    setUser({ email, role, name });
   };
 
   return (
