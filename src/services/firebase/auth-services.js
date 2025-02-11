@@ -64,8 +64,8 @@ export const handleEmailRegister = async (email, password, username) => {
 
     // Simpan data pengguna ke Firestore
     await setDoc(doc(db, "users", user.uid), {
-      email,
-      username, // Menyimpan username
+      email: email,
+      name: username,
       role: "user",
     });
 
