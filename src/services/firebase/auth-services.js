@@ -9,7 +9,7 @@ import { auth, db } from "./firebase-config";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 
 // Fungsi untuk login menggunakan Google
-export const handleGoogleLogin = async () => {
+export const serviceGoogleLogin = async () => {
   const provider = new GoogleAuthProvider();
   try {
     const userCredential = await signInWithPopup(auth, provider);
@@ -31,7 +31,7 @@ export const handleGoogleLogin = async () => {
 };
 
 // Fungsi untuk login menggunakan email dan password
-export const handleEmailLogin = async (email, password) => {
+export const serviceEmailLogin = async (email, password) => {
   try {
     const userCredential = await signInWithEmailAndPassword(
       auth,
@@ -52,7 +52,7 @@ export const handleEmailLogin = async (email, password) => {
 };
 
 // Fungsi untuk registrasi menggunakan email dan password
-export const handleEmailRegister = async (email, password, username) => {
+export const serviceEmailRegister = async (email, password, username) => {
   try {
     // Membuat akun pengguna dengan email dan password
     const userCredential = await createUserWithEmailAndPassword(
@@ -83,7 +83,7 @@ export const handleEmailRegister = async (email, password, username) => {
 };
 
 // Fungsi untuk logout
-export const handleLogout = async () => {
+export const serviceLogout = async () => {
   try {
     await auth.signOut();
   } catch (error) {

@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { handleLogout } from "../services/firebase/auth-services";
+import { serviceLogout } from "../services/firebase/auth-services";
 
 const useAuthStore = create(
   persist(
@@ -10,7 +10,7 @@ const useAuthStore = create(
       signOut: async () => {
         try {
           // Panggil fungsi logout dari Firebase
-          await handleLogout();
+          await serviceLogout();
 
           // Hapus data dari local storage secara manual
           if (typeof window !== "undefined") {
