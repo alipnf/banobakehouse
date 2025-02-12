@@ -17,6 +17,7 @@ export const serviceGoogleLogin = async () => {
     const userDoc = await getDoc(doc(db, "users", user.uid));
     if (!userDoc.exists()) {
       await setDoc(doc(db, "users", user.uid), {
+        id: user.uid,
         email: user.email,
         name: user.displayName,
         role: "user",
@@ -64,6 +65,7 @@ export const serviceEmailRegister = async (email, password, username) => {
 
     // Simpan data pengguna ke Firestore
     await setDoc(doc(db, "users", user.uid), {
+      id: user.uid,
       email: email,
       name: username,
       role: "user",

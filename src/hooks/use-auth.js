@@ -37,8 +37,8 @@ const useAuth = () => {
     setAuthError(""); // Reset pesan error sebelum mencoba login
     try {
       const user = await serviceEmailLogin(email, password);
-      const { email: userEmail, role, name } = user;
-      setUser({ email: userEmail, role, name });
+      const { id, email: userEmail, role, name } = user;
+      setUser({ id, email: userEmail, role, name });
       toast.success("Login berhasil!");
       // Redirect berdasarkan role
       if (role === "admin") {
@@ -62,8 +62,9 @@ const useAuth = () => {
     setIsGoogleLoading(true);
     try {
       const user = await serviceGoogleLogin();
-      const { email, role, name } = user;
-      setUser({ email, role, name });
+      console.log("User:", user);
+      const { id, email, role, name } = user;
+      setUser({ id, email, role, name });
       toast.success("Login berhasil!");
       // Redirect berdasarkan role
       if (role === "admin") {
