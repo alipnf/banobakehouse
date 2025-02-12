@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes } from "react-router-dom";
-import UserRoutes from "./routes/user-routes";
-import QuestRoutes from "./routes/quest-routes";
+import { AdminRoutes, QuestRoutes, UserRoutes } from "./routes";
 import { ToastContainer } from "react-toastify";
 
 const App = () => {
@@ -21,6 +20,7 @@ const App = () => {
       <Routes>
         {UserRoutes()}
         {QuestRoutes()}
+        {AdminRoutes()}
       </Routes>
     </BrowserRouter>
   );
