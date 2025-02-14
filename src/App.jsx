@@ -1,8 +1,14 @@
-import { BrowserRouter, Routes } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AdminRoutes, QuestRoutes, UserRoutes } from "./routes";
 import { ToastContainer } from "react-toastify";
+import ErrorPage from "./pages/error/error-page";
+import { useEffect } from "react";
+import { applyThemeFromLocalStorage } from "./utils/theme";
 
 const App = () => {
+  useEffect(() => {
+    applyThemeFromLocalStorage();
+  }, []);
   return (
     <BrowserRouter>
       <ToastContainer
@@ -21,6 +27,7 @@ const App = () => {
         {UserRoutes()}
         {QuestRoutes()}
         {AdminRoutes()}
+        <Route path="*" element={<ErrorPage />} />
       </Routes>
     </BrowserRouter>
   );

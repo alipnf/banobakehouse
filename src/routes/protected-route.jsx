@@ -6,19 +6,21 @@ import { useEffect, useState } from "react";
 
 const ProtectedRoute = ({ children }) => {
   const { user } = useAuthStore();
-  const [isAdmin, setIsAdmin] = useState(null); // State untuk menyimpan status admin
+  const [isAdmin, setIsAdmin] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const checkUserRole = async () => {
       if (!user) {
         setIsAdmin(false);
+        setLoading(false);
         return;
       }
-
       try {
         const userDoc = await getDoc(doc(db, "users", user.id));
         if (userDoc.exists()) {
           const userData = userDoc.data();
+          console.log(userData);
           setIsAdmin(userData.role === "admin");
         } else {
           console.error("User not found in Firestore");
@@ -27,11 +29,26 @@ const ProtectedRoute = ({ children }) => {
       } catch (error) {
         console.error("Error checking user role:", error);
         setIsAdmin(false);
+      } finally {
+        setLoading(false);
       }
     };
-
     checkUserRole();
-  }, [user]); // useEffect berjalan saat `user` berubah
+  }, [user]);
+
+  if (loading) {
+    return (
+      <div className="hs-embed-spinner flex justify-center items-center mt-5">
+        <div
+          className="animate-spin inline-block w-6 h-6 border-[3px] border-current border-t-transparent text-blue-600 rounded-full"
+          role="status"
+          aria-label="loading"
+        >
+          <span className="sr-only">Loading...</span>
+        </div>
+      </div>
+    );
+  }
 
   if (!isAdmin) {
     return <Navigate to="/error" replace />;
