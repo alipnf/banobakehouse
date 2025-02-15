@@ -1,9 +1,46 @@
+import { useEffect, useState } from "react";
+
 const ToggleTheme = () => {
+  // State untuk melacak mode saat ini
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    // Baca nilai hs_theme dari localStorage
+    const savedTheme = localStorage.getItem("hs_theme");
+    return savedTheme === "dark";
+  });
+
+  // Fungsi untuk toggle mode
+  const toggleTheme = () => {
+    const newMode = !isDarkMode;
+    setIsDarkMode(newMode);
+
+    // Simpan mode baru ke localStorage
+    localStorage.setItem("hs_theme", newMode ? "dark" : "light");
+
+    // Tambahkan atau hapus kelas 'dark' pada <html>
+    if (newMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  };
+
+  // Efek untuk menerapkan mode saat komponen dimuat
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("hs_theme");
+    if (savedTheme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, []);
+
   return (
     <>
+      {/* Tombol untuk mengaktifkan dark mode */}
       <button
         type="button"
         className="hs-dark-mode-active:hidden block hs-dark-mode font-medium text-gray-800 rounded-full hover:bg-gray-200 focus:outline-none focus:bg-gray-200 dark:text-neutral-200 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
+        onClick={toggleTheme}
         data-hs-theme-click-value="dark"
       >
         <span className="group inline-flex shrink-0 justify-center items-center size-9">
@@ -23,9 +60,12 @@ const ToggleTheme = () => {
           </svg>
         </span>
       </button>
+
+      {/* Tombol untuk mengaktifkan light mode */}
       <button
         type="button"
         className="hs-dark-mode-active:block hidden hs-dark-mode font-medium text-gray-800 rounded-full hover:bg-gray-200 focus:outline-none focus:bg-gray-200 dark:text-neutral-200 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
+        onClick={toggleTheme}
         data-hs-theme-click-value="light"
       >
         <span className="group inline-flex shrink-0 justify-center items-center size-9">

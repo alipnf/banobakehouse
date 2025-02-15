@@ -8,7 +8,7 @@ const ProductNotFound = () => {
           Produk tidak ditemukan
         </h2>
         <Link
-          to="/produk"
+          to="/product"
           className="text-sm md:text-base text-secondary dark:text-light hover:underline"
         >
           Kembali ke Produk
