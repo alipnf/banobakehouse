@@ -1,93 +1,22 @@
-import { useState, useEffect } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { Controller } from "react-hook-form";
 import { Save, Phone, Mail, MapPin, Plus, Trash2, Car } from "lucide-react";
-import {
-  getWebInfo,
-  saveWebInfo,
-  addSocialMedia,
-  removeSocialMedia,
-} from "@/services/firebase/about-service";
+import useWebInfo from "@/hooks/use-web-info";
 
 const WebInfo = () => {
-  const [socialMedia, setSocialMedia] = useState([]);
-  const [newPlatform, setNewPlatform] = useState("");
-  const [newUrl, setNewUrl] = useState("");
-  const [initialData, setInitialData] = useState(null); // State untuk menyimpan data awal
-
-  const {
+  const [
     handleSubmit,
     control,
-    watch,
-    formState: { isValid },
-    reset,
-  } = useForm({
-    mode: "onChange", // Validasi dilakukan saat perubahan input
-  });
-
-  // Fetch data saat komponen dimuat
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await getWebInfo();
-      if (data) {
-        const initialFormData = {
-          whatsapp: data.whatsapp || "",
-          email: data.email || "",
-          address: data.address || "",
-          grab: data.grab || "",
-        };
-        reset(initialFormData);
-        setInitialData(initialFormData); // Simpan data awal
-        setSocialMedia(data.socialMedia || []);
-      }
-    };
-    fetchData();
-  }, [reset]);
-
-  // Watch form values to detect changes
-  const formData = watch(); // Mendapatkan nilai terkini dari form
-
-  // Fungsi untuk memeriksa apakah ada perubahan data
-  const hasChanges = () => {
-    if (!initialData) return false;
-    return (
-      formData.whatsapp !== initialData.whatsapp ||
-      formData.email !== initialData.email ||
-      formData.address !== initialData.address ||
-      formData.grab !== initialData.grab ||
-      formData.grab !== initialData.grab ||
-      JSON.stringify(socialMedia) !== JSON.stringify(initialData.socialMedia)
-    );
-  };
-
-  // Handle submit form utama
-  const onSubmit = async () => {
-    if (!hasChanges()) return; // Jangan simpan jika tidak ada perubahan
-    await saveWebInfo({ ...formData, socialMedia });
-    alert("Data berhasil disimpan!");
-    setInitialData({ ...formData, socialMedia }); // Update data awal setelah disimpan
-  };
-
-  // Handle tambah media sosial
-  const handleAddSocialMedia = async (e) => {
-    e.preventDefault();
-    if (!newPlatform.trim() || !newUrl.trim()) return;
-
-    const newSocialMediaItem = {
-      id: Date.now().toString(),
-      platform: newPlatform,
-      url: newUrl,
-    };
-    await addSocialMedia(newSocialMediaItem);
-    setSocialMedia((prev) => [...prev, newSocialMediaItem]);
-    setNewPlatform("");
-    setNewUrl("");
-  };
-
-  // Handle hapus media sosial
-  const handleRemoveSocialMedia = async (id) => {
-    await removeSocialMedia(id);
-    setSocialMedia((prev) => prev.filter((item) => item.id !== id));
-  };
+    isValid,
+    socialMedia,
+    setNewPlatform,
+    setNewUrl,
+    handleAddSocialMedia,
+    handleRemoveSocialMedia,
+    onSubmit,
+    hasChanges,
+    newUrl,
+    newPlatform,
+  ] = useWebInfo();
 
   return (
     <div className="space-y-6">
@@ -225,14 +154,14 @@ const WebInfo = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <input
                   type="text"
-                  value={newPlatform}
+                  value={newPlatform || ""}
                   onChange={(e) => setNewPlatform(e.target.value)}
                   className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
                   placeholder="Contoh: Facebook, Twitter"
                 />
                 <input
                   type="url"
-                  value={newUrl}
+                  value={newUrl || ""}
                   onChange={(e) => setNewUrl(e.target.value)}
                   className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
                   placeholder="https://"
@@ -265,7 +194,7 @@ const WebInfo = () => {
                 </button>
               </div>
             </form>
-          </div>
+          </div>{" "}
           {/* Tabel Media Sosial */}
           <div className="overflow-auto">
             <table className="w-full min-w-[500px]">
