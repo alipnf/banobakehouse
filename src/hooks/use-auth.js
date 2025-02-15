@@ -5,7 +5,7 @@ import {
   serviceGoogleLogin,
   serviceEmailLogin,
   serviceEmailRegister,
-} from "@/services/firebase/auth-services";
+} from "@/services/firebase/auth-service";
 import useAuthStore from "@/store/use-auth-store";
 
 const useAuth = () => {

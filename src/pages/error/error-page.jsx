@@ -1,11 +1,41 @@
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { applyThemeFromLocalStorage } from "@/utils/theme";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/services/firebase/firebase-config";
+import useAuthStore from "@/store/use-auth-store";
 
 const ErrorPage = () => {
+  const { user } = useAuthStore();
+  const [isAdmin, setIsAdmin] = useState(null);
+
   useEffect(() => {
     applyThemeFromLocalStorage();
   }, []);
+
+  useEffect(() => {
+    const checkUserRole = async () => {
+      if (!user) {
+        setIsAdmin(false);
+        return;
+      }
+      try {
+        const userDoc = await getDoc(doc(db, "users", user.id));
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          setIsAdmin(userData.role === "admin");
+        } else {
+          console.error("User not found in Firestore");
+          setIsAdmin(false);
+        }
+      } catch (error) {
+        console.error("Error checking user role:", error);
+        setIsAdmin(false);
+      }
+    };
+    checkUserRole();
+  }, [user]);
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-light dark:bg-dark">
       <main
@@ -26,7 +56,7 @@ const ErrorPage = () => {
         <div className="mt-5 flex flex-col justify-center items-center gap-2 sm:flex-row sm:gap-3">
           <Link
             className="w-full sm:w-auto py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-secondary text-primary hover:bg-opacity-90 focus:outline-none focus:bg-opacity-90 disabled:opacity-50 disabled:pointer-events-none"
-            to="/"
+            to={isAdmin ? "/admin" : "/"}
           >
             <svg
               className="shrink-0 size-4"

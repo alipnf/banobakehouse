@@ -20,7 +20,6 @@ const ProtectedRoute = ({ children }) => {
         const userDoc = await getDoc(doc(db, "users", user.id));
         if (userDoc.exists()) {
           const userData = userDoc.data();
-          console.log(userData);
           setIsAdmin(userData.role === "admin");
         } else {
           console.error("User not found in Firestore");
