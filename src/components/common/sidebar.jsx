@@ -1,19 +1,21 @@
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { Home, Package, Grid, HelpCircle, MessageCircle } from "lucide-react";
 
 const Sidebar = ({ children }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <>
+      {/* Navbar Top (Mobile) */}
       <div className="sticky top-0 inset-x-0 z-20 bg-white border-y px-4 sm:px-6 lg:px-8 lg:hidden dark:bg-neutral-800 dark:border-neutral-700">
         <div className="flex items-center py-2">
           <button
             type="button"
-            className="size-8 flex justify-center items-center gap-x-2 border border-gray-200 text-gray-800 hover:text-gray-500 rounded-lg focus:outline-none focus:text-gray-500 disabled:opacity-50 disabled:pointer-events-none dark:border-neutral-700 dark:text-neutral-200 dark:hover:text-neutral-500 dark:focus:text-neutral-500"
+            className="size-8 flex justify-center items-center gap-x-2 border border-gray-200 text-gray-800 hover:text-gray-500 rounded-lg focus:outline-none dark:border-neutral-700 dark:text-neutral-200 dark:hover:text-neutral-500"
             aria-haspopup="dialog"
-            aria-expanded="false"
-            aria-controls="hs-application-sidebar"
-            aria-label="Toggle navigation"
-            data-hs-overlay="#hs-application-sidebar"
+            aria-expanded={isOpen}
+            onClick={() => setIsOpen(!isOpen)}
           >
             <span className="sr-only">Toggle Navigation</span>
             <svg
@@ -33,50 +35,29 @@ const Sidebar = ({ children }) => {
               <path d="m8 9 3 3-3 3" />
             </svg>
           </button>
-          <ol className="ms-3 flex items-center whitespace-nowrap">
-            <li className="flex items-center text-sm text-gray-800 dark:text-neutral-400">
-              Application Layout
-              <svg
-                className="shrink-0 mx-3 overflow-visible size-2.5 text-gray-400 dark:text-neutral-500"
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M5 1L10.6869 7.16086C10.8637 7.35239 10.8637 7.64761 10.6869 7.83914L5 14"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </li>
-            <li
-              className="text-sm font-semibold text-gray-800 truncate dark:text-neutral-400"
-              aria-current="page"
-            >
-              Dashboard
-            </li>
-          </ol>
+          <span className="ms-3 text-sm font-semibold text-gray-800 dark:text-neutral-400">
+            Dashboard
+          </span>
         </div>
       </div>
+
+      {/* Sidebar */}
       <div
-        id="hs-application-sidebar"
-        className="hs-overlay [--auto-close:lg]
-  hs-overlay-open:translate-x-0
-  -translate-x-full transition-all duration-300 transform
-  w-[260px] h-full
-  hidden
-  fixed inset-y-0 start-0 z-[60]
-  bg-white border-e border-gray-200
-  lg:block lg:translate-x-0 lg:end-auto lg:bottom-0
-  dark:bg-neutral-800 dark:border-neutral-700"
-        role="dialog"
-        tabIndex="-1"
-        aria-label="Sidebar"
+        className={`fixed inset-y-0 start-0 z-50 w-[260px] h-full bg-white border-e border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 transform transition-transform duration-300 ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        } lg:translate-x-0 lg:block`}
       >
         <div className="relative flex flex-col h-full max-h-full">
+          {/* Close Button (Mobile) */}
+          <div className="flex justify-end p-2 lg:hidden">
+            <button
+              onClick={() => setIsOpen(false)}
+              className="p-2 rounded-lg text-gray-800 dark:text-neutral-400 hover:bg-gray-200 dark:hover:bg-neutral-700"
+            >
+              ✕
+            </button>
+          </div>
+
           <div className="px-6 pt-4 flex items-center">
             <NavLink
               to="/admin"
@@ -85,93 +66,96 @@ const Sidebar = ({ children }) => {
               Banobakehouse
             </NavLink>
           </div>
-          <div className="h-full overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500">
-            <nav
-              className="hs-accordion-group p-3 w-full flex flex-col flex-wrap"
-              data-hs-accordion-always-open
-            >
-              <ul className="flex flex-col space-y-1">
-                {/* Menu Baru */}
-                <li>
-                  <NavLink
-                    to="/admin/about-us"
-                    className={({ isActive }) =>
-                      `flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg ${
-                        isActive
-                          ? "bg-gray-100 text-gray-800 dark:bg-neutral-700 dark:text-white"
-                          : "text-gray-800 hover:bg-gray-100 dark:text-neutral-200 dark:hover:bg-neutral-700 dark:hover:text-neutral-300"
-                      }`
-                    }
-                  >
-                    <Home size={16} />
-                    Tentang Bano
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    to="/admin/products"
-                    className={({ isActive }) =>
-                      `flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg ${
-                        isActive
-                          ? "bg-gray-100 text-gray-800 dark:bg-neutral-700 dark:text-white"
-                          : "text-gray-800 hover:bg-gray-100 dark:text-neutral-200 dark:hover:bg-neutral-700 dark:hover:text-neutral-300"
-                      }`
-                    }
-                  >
-                    <Package size={16} />
-                    Produk
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    to="/admin/categories"
-                    className={({ isActive }) =>
-                      `flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg ${
-                        isActive
-                          ? "bg-gray-100 text-gray-800 dark:bg-neutral-700 dark:text-white"
-                          : "text-gray-800 hover:bg-gray-100 dark:text-neutral-200 dark:hover:bg-neutral-700 dark:hover:text-neutral-300"
-                      }`
-                    }
-                  >
-                    <Grid size={16} />
-                    Kategori
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    to="/admin/faq"
-                    className={({ isActive }) =>
-                      `flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg ${
-                        isActive
-                          ? "bg-gray-100 text-gray-800 dark:bg-neutral-700 dark:text-white"
-                          : "text-gray-800 hover:bg-gray-100 dark:text-neutral-200 dark:hover:bg-neutral-700 dark:hover:text-neutral-300"
-                      }`
-                    }
-                  >
-                    <HelpCircle size={16} />
-                    FAQ
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    to="/admin/testimonials"
-                    className={({ isActive }) =>
-                      `flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg ${
-                        isActive
-                          ? "bg-gray-100 text-gray-800 dark:bg-neutral-700 dark:text-white"
-                          : "text-gray-800 hover:bg-gray-100 dark:text-neutral-200 dark:hover:bg-neutral-700 dark:hover:text-neutral-300"
-                      }`
-                    }
-                  >
-                    <MessageCircle size={16} />
-                    Testimoni
-                  </NavLink>
-                </li>
-              </ul>
-            </nav>
-          </div>
+
+          {/* Sidebar Links */}
+          <nav className="p-3">
+            <ul className="flex flex-col space-y-1">
+              <li>
+                <NavLink
+                  to="/admin/about-us"
+                  className={({ isActive }) =>
+                    `flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg ${
+                      isActive
+                        ? "bg-gray-100 text-gray-800 dark:bg-neutral-700 dark:text-white"
+                        : "text-gray-800 hover:bg-gray-100 dark:text-neutral-200 dark:hover:bg-neutral-700 dark:hover:text-neutral-300"
+                    }`
+                  }
+                  onClick={() => setIsOpen(false)}
+                >
+                  <Home size={16} />
+                  Tentang Bano
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="/admin/products"
+                  className={({ isActive }) =>
+                    `flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg ${
+                      isActive
+                        ? "bg-gray-100 text-gray-800 dark:bg-neutral-700 dark:text-white"
+                        : "text-gray-800 hover:bg-gray-100 dark:text-neutral-200 dark:hover:bg-neutral-700 dark:hover:text-neutral-300"
+                    }`
+                  }
+                  onClick={() => setIsOpen(false)}
+                >
+                  <Package size={16} />
+                  Produk
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="/admin/categories"
+                  className={({ isActive }) =>
+                    `flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg ${
+                      isActive
+                        ? "bg-gray-100 text-gray-800 dark:bg-neutral-700 dark:text-white"
+                        : "text-gray-800 hover:bg-gray-100 dark:text-neutral-200 dark:hover:bg-neutral-700 dark:hover:text-neutral-300"
+                    }`
+                  }
+                  onClick={() => setIsOpen(false)}
+                >
+                  <Grid size={16} />
+                  Kategori
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="/admin/faq"
+                  className={({ isActive }) =>
+                    `flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg ${
+                      isActive
+                        ? "bg-gray-100 text-gray-800 dark:bg-neutral-700 dark:text-white"
+                        : "text-gray-800 hover:bg-gray-100 dark:text-neutral-200 dark:hover:bg-neutral-700 dark:hover:text-neutral-300"
+                    }`
+                  }
+                  onClick={() => setIsOpen(false)}
+                >
+                  <HelpCircle size={16} />
+                  FAQ
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="/admin/testimonials"
+                  className={({ isActive }) =>
+                    `flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg ${
+                      isActive
+                        ? "bg-gray-100 text-gray-800 dark:bg-neutral-700 dark:text-white"
+                        : "text-gray-800 hover:bg-gray-100 dark:text-neutral-200 dark:hover:bg-neutral-700 dark:hover:text-neutral-300"
+                    }`
+                  }
+                  onClick={() => setIsOpen(false)}
+                >
+                  <MessageCircle size={16} />
+                  Testimoni
+                </NavLink>
+              </li>
+            </ul>
+          </nav>
         </div>
       </div>
+
+      {/* Content Wrapper */}
       <div className="w-full pt-10 px-4 sm:px-6 md:px-8 lg:ps-72">
         {children}
       </div>
