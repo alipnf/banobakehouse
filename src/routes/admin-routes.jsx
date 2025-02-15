@@ -6,7 +6,7 @@ import Dashboard from "../pages/admin/dashboard";
 const AdminRoutes = () => {
   return (
     <Route
-      path="dashboard"
+      path="admin"
       element={
         <ProtectedRoute>
           <AdminLayout />

@@ -43,7 +43,7 @@ const useAuth = () => {
       // Redirect berdasarkan role
       if (role === "admin") {
         setTimeout(() => {
-          navigate("/dashboard");
+          navigate("/admin");
         }, 1000);
       } else {
         setTimeout(() => {
@@ -69,7 +69,7 @@ const useAuth = () => {
       // Redirect berdasarkan role
       if (role === "admin") {
         setTimeout(() => {
-          navigate("/dashboard");
+          navigate("/admin");
         }, 1000);
       } else {
         setTimeout(() => {
