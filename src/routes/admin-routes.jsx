@@ -1,7 +1,7 @@
 import { Route } from "react-router-dom";
 import ProtectedRoute from "./protected-route";
 import AdminLayout from "@/layouts/admin-layout";
-import Dashboard from "@/pages/admin/dashboard";
+import AboutUsPage from "@/pages/admin/about-us-page";
 
 const AdminRoutes = () => {
   return (
@@ -13,7 +13,8 @@ const AdminRoutes = () => {
         </ProtectedRoute>
       }
     >
-      <Route index element={<Dashboard />} />
+      <Route index element={<AboutUsPage />} />
+      <Route path="about-us" element={<AboutUsPage />} />
     </Route>
   );
 };

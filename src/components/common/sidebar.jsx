@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { Home, Package, Grid, HelpCircle, MessageCircle } from "lucide-react";
+import ToggleTheme from "./toggle-theme";
 
 const Sidebar = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -58,13 +59,15 @@ const Sidebar = ({ children }) => {
             </button>
           </div>
 
-          <div className="px-6 pt-4 flex items-center">
+          <div className="px-6 pt-4 flex items-center justify-center gap-2">
             <NavLink
               to="/admin"
               className="text-xl font-semibold dark:text-primary"
             >
               Banobakehouse
             </NavLink>
+
+            <ToggleTheme />
           </div>
 
           {/* Sidebar Links */}
