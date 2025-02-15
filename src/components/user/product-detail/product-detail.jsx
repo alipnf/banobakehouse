@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Star, Minus, Plus, ArrowLeft } from "lucide-react";
-import useProductStore from "../../../store/use-product-store";
-import { formatCurrency } from "../../../utils/format-currency";
+import useProductStore from "@/store/use-product-store";
+import { formatCurrency } from "@/utils/format-currency";
 import ProductNotFound from "./product-not-found";
 
 const ProductDetail = () => {

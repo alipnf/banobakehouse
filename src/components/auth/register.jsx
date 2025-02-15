@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import useAuth from "../../hooks/use-auth"; // Import custom hook
+import useAuth from "@/hooks/use-auth";
 import GoogleIcon from "./google-icon";
 import "react-toastify/dist/ReactToastify.css";
 

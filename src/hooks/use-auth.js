@@ -5,8 +5,8 @@ import {
   serviceGoogleLogin,
   serviceEmailLogin,
   serviceEmailRegister,
-} from "../services/firebase/auth-services";
-import useAuthStore from "../store/use-auth-store";
+} from "@/services/firebase/auth-services";
+import useAuthStore from "@/store/use-auth-store";
 
 const useAuth = () => {
   const navigate = useNavigate();

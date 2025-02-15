@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import useProductStore from "../../../store/use-product-store";
+import useProductStore from "@/store/use-product-store";
 import { Star } from "lucide-react";
-import { formatCurrency } from "../../../utils/format-currency";
+import { formatCurrency } from "@/utils/format-currency";
 
 const ProductCard = ({ product }) => {
   const navigate = useNavigate();

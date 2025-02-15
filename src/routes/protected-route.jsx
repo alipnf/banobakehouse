@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "../services/firebase/firebase-config";
-import useAuthStore from "../store/use-auth-store";
+import { db } from "@/services/firebase/firebase-config";
+import useAuthStore from "@/store/use-auth-store";
 import { useEffect, useState } from "react";
 
 const ProtectedRoute = ({ children }) => {

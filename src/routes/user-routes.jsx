@@ -1,5 +1,5 @@
 import { Route } from "react-router-dom";
-import UserLayout from "../layouts/user-layout";
+import UserLayout from "@/layouts/user-layout";
 import {
   HomePage,
   ProductPage,

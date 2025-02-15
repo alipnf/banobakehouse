@@ -1,5 +1,5 @@
 import { Route } from "react-router-dom";
-import QuestLayout from "../layouts/quest-layout";
+import QuestLayout from "@/layouts/quest-layout";
 import { LoginPage, RegisterPage } from "../pages/quest";
 
 const QuestRoutes = () => {

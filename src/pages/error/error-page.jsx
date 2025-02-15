@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
-import { applyThemeFromLocalStorage } from "../../utils/theme";
+import { applyThemeFromLocalStorage } from "@/utils/theme";
 
 const ErrorPage = () => {
   useEffect(() => {

@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import ToggleTheme from "./toggle-theme";
-import useAuthStore from "../../store/use-auth-store";
+import useAuthStore from "@/store/use-auth-store";
 import { useState } from "react";
 import { Button, Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 
