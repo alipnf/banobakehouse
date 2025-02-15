@@ -1,4 +1,4 @@
-import ProductDetail from "../../components/users/product-detail/product-detail";
+import ProductDetail from "../../components/user/product-detail/product-detail";
 
 const ProductDetailPage = () => {
   return (
