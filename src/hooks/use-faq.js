@@ -5,7 +5,7 @@ import {
   addFAQItem,
   removeFAQItem,
   saveFAQ,
-} from "@/services/firebase/faq-services";
+} from "@/services/firebase/faq-service";
 
 const useFaq = () => {
   const [showForm, setShowForm] = useState(false);

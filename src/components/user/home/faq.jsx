@@ -1,4 +1,4 @@
-import { getFAQ } from "@/services/firebase/faq-services";
+import { getFAQ } from "@/services/firebase/faq-service";
 import { useEffect, useState } from "react";
 
 const Faq = () => {
