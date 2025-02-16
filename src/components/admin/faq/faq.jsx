@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
 import { Plus, Edit2, Trash2 } from "lucide-react";
 import {
   getFAQ,
@@ -11,10 +12,15 @@ const FAQ = () => {
   const [showForm, setShowForm] = useState(false);
   const [editingFaq, setEditingFaq] = useState(null);
   const [faqs, setFaqs] = useState([]);
-  const [formData, setFormData] = useState({
-    question: "",
-    answer: "",
-  });
+  const [error, setError] = useState("");
+
+  // React Hook Form
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
 
   useEffect(() => {
     const fetchFAQs = async () => {
@@ -26,35 +32,31 @@ const FAQ = () => {
     fetchFAQs();
   }, []);
 
-  // Handler untuk input form
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
   // Handler untuk menambah atau memperbarui FAQ
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmit = async (data) => {
+    if (faqs.length >= 5 && !editingFaq) {
+      setError("Maksimal 5 FAQ. Hapus salah satu FAQ terlebih dahulu.");
+      return;
+    }
+
+    setError(""); // Reset error message
 
     if (editingFaq) {
       // Jika sedang mengedit FAQ
       const updatedFAQs = faqs.map((faq) =>
-        faq.id === editingFaq ? { ...faq, ...formData } : faq,
+        faq.id === editingFaq ? { ...faq, ...data } : faq,
       );
       await saveFAQ({ faqs: updatedFAQs });
       setFaqs(updatedFAQs);
     } else {
       // Jika menambah FAQ baru
-      const newFAQ = { id: Date.now().toString(), ...formData };
+      const newFAQ = { id: Date.now().toString(), ...data };
       await addFAQItem(newFAQ);
       setFaqs((prevFaqs) => [...prevFaqs, newFAQ]);
     }
 
     // Reset form dan state
-    setFormData({ question: "", answer: "" });
+    reset();
     setShowForm(false);
     setEditingFaq(null);
   };
@@ -71,55 +73,73 @@ const FAQ = () => {
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-secondary">FAQ</h1>
         <button
-          onClick={() => setShowForm(true)}
+          onClick={() => {
+            if (faqs.length >= 5) {
+              setError("Maksimal 5 FAQ. Hapus salah satu FAQ terlebih dahulu.");
+            } else {
+              setShowForm(true);
+            }
+          }}
           className="flex items-center px-4 py-2 bg-secondary text-white rounded-lg hover:bg-secondary/90"
         >
           <Plus className="w-5 h-5 mr-2" />
           Tambah FAQ
         </button>
       </div>
+
+      {/* Error Message */}
+      {error && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
+          {error}
+        </div>
+      )}
+
       {/* Form */}
       {showForm && (
         <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
           <h2 className="text-lg font-semibold text-secondary mb-4">
             {editingFaq ? "Edit FAQ" : "Tambah FAQ Baru"}
           </h2>
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-secondary mb-1">
                 Pertanyaan
               </label>
               <input
                 type="text"
-                name="question"
-                value={formData.question}
-                onChange={handleInputChange}
+                {...register("question", {
+                  required: "Pertanyaan wajib diisi",
+                })}
                 className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
                 placeholder="Masukkan pertanyaan"
-                required
               />
+              {errors.question && (
+                <p className="text-red-500 text-sm">
+                  {errors.question.message}
+                </p>
+              )}
             </div>
             <div>
               <label className="block text-sm font-medium text-secondary mb-1">
                 Jawaban
               </label>
               <textarea
-                name="answer"
-                value={formData.answer}
-                onChange={handleInputChange}
+                {...register("answer", { required: "Jawaban wajib diisi" })}
                 className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
                 rows={4}
                 placeholder="Masukkan jawaban"
-                required
               />
+              {errors.answer && (
+                <p className="text-red-500 text-sm">{errors.answer.message}</p>
+              )}
             </div>
             <div className="flex justify-end space-x-4">
               <button
                 type="button"
                 onClick={() => {
+                  reset();
                   setShowForm(false);
                   setEditingFaq(null);
-                  setFormData({ question: "", answer: "" });
                 }}
                 className="px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50"
               >
@@ -135,6 +155,7 @@ const FAQ = () => {
           </form>
         </div>
       )}
+
       {/* FAQ List */}
       <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
@@ -170,7 +191,7 @@ const FAQ = () => {
                       <button
                         onClick={() => {
                           setEditingFaq(faq.id);
-                          setFormData({
+                          reset({
                             question: faq.question,
                             answer: faq.answer,
                           });
@@ -193,7 +214,7 @@ const FAQ = () => {
             </tbody>
           </table>
         </div>
-      </div>{" "}
+      </div>
     </div>
   );
 };
