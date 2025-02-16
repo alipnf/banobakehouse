@@ -1,71 +1,22 @@
-import { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
+import useFaq from "@/hooks/use-faq";
 import { Plus, Edit2, Trash2 } from "lucide-react";
-import {
-  getFAQ,
-  addFAQItem,
-  removeFAQItem,
-  saveFAQ,
-} from "@/services/firebase/faq-services";
 
 const FAQ = () => {
-  const [showForm, setShowForm] = useState(false);
-  const [editingFaq, setEditingFaq] = useState(null);
-  const [faqs, setFaqs] = useState([]);
-  const [error, setError] = useState("");
-
-  // React Hook Form
   const {
+    showForm,
+    setShowForm,
+    editingFaq,
+    setEditingFaq,
+    faqs,
+    error,
+    setError,
     register,
     handleSubmit,
     reset,
-    formState: { errors },
-  } = useForm();
-
-  useEffect(() => {
-    const fetchFAQs = async () => {
-      const fetchedFAQs = await getFAQ();
-      if (fetchedFAQs && fetchedFAQs.faqs) {
-        setFaqs(fetchedFAQs.faqs);
-      }
-    };
-    fetchFAQs();
-  }, []);
-
-  // Handler untuk menambah atau memperbarui FAQ
-  const onSubmit = async (data) => {
-    if (faqs.length >= 5 && !editingFaq) {
-      setError("Maksimal 5 FAQ. Hapus salah satu FAQ terlebih dahulu.");
-      return;
-    }
-
-    setError(""); // Reset error message
-
-    if (editingFaq) {
-      // Jika sedang mengedit FAQ
-      const updatedFAQs = faqs.map((faq) =>
-        faq.id === editingFaq ? { ...faq, ...data } : faq,
-      );
-      await saveFAQ({ faqs: updatedFAQs });
-      setFaqs(updatedFAQs);
-    } else {
-      // Jika menambah FAQ baru
-      const newFAQ = { id: Date.now().toString(), ...data };
-      await addFAQItem(newFAQ);
-      setFaqs((prevFaqs) => [...prevFaqs, newFAQ]);
-    }
-
-    // Reset form dan state
-    reset();
-    setShowForm(false);
-    setEditingFaq(null);
-  };
-
-  // Handler untuk menghapus FAQ
-  const handleDelete = async (id) => {
-    await removeFAQItem(id);
-    setFaqs((prevFaqs) => prevFaqs.filter((faq) => faq.id !== id));
-  };
+    errors,
+    onSubmit,
+    handleDelete,
+  } = useFaq();
 
   return (
     <div className="space-y-6">
