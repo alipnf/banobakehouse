@@ -1,40 +1,31 @@
-import { useEffect } from "react";
+import { getFAQ } from "@/services/firebase/faq-services";
+import { useEffect, useState } from "react";
 
 const Faq = () => {
+  const [faqs, setFaqs] = useState([]);
+  const [activeIndex, setActiveIndex] = useState(null);
+
   useEffect(() => {
-    window.dispatchEvent(new Event("load"));
+    const fetchFAQs = async () => {
+      try {
+        const faqData = await getFAQ();
+        if (faqData && faqData.faqs) {
+          setFaqs(faqData.faqs);
+        }
+      } catch (error) {
+        console.error("Error fetching FAQs:", error);
+      }
+    };
+    fetchFAQs();
   }, []);
 
-  const faqs = [
-    {
-      question: "Berapa lama waktu pemesanan yang dibutuhkan?",
-      answer:
-        "Untuk kue reguler, pemesanan minimal 3 hari sebelum pengambilan. Untuk kue pernikahan atau acara besar, disarankan memesan minimal 2 minggu sebelumnya.",
-    },
-    {
-      question: "Apakah bisa request desain kue khusus?",
-      answer:
-        "Ya, kami menerima request desain khusus. Silakan konsultasikan desain yang Anda inginkan minimal 1 minggu sebelum pemesanan.",
-    },
-    {
-      question: "Apakah tersedia layanan pengiriman?",
-      answer:
-        "Ya, kami menyediakan layanan pengiriman melalui GoFood dan GrabFood untuk area tertentu. Untuk kue pernikahan, kami memiliki layanan pengiriman khusus.",
-    },
-    {
-      question: "Apakah tersedia opsi kue untuk diet khusus?",
-      answer:
-        "Ya, kami menyediakan opsi kue bebas gluten, rendah gula, dan vegetarian. Harap informasikan kebutuhan diet khusus Anda saat memesan.",
-    },
-    {
-      question: "Bagaimana cara melakukan pembayaran?",
-      answer:
-        "Kami menerima pembayaran melalui transfer bank dan e-wallet (GoPay, OVO, Dana). Untuk pemesanan kue pernikahan, diperlukan DP minimal 50%.",
-    },
-  ];
+  // Fungsi untuk toggle accordion
+  const toggleAccordion = (index) => {
+    setActiveIndex(activeIndex === index ? null : index); // Jika sudah aktif, tutup; jika tidak, buka
+  };
 
   return (
-    <div className="hs-accordion-group mt-5 pt-4 max-w-7xl mx-auto px-4">
+    <div className="mt-5 pt-4 max-w-7xl mx-auto px-4">
       <div className="text-center mb-12">
         <h2 className="text-3xl font-extrabold dark:text-primary text-secondary sm:text-4xl">
           Pertanyaan yang Sering Diajukan
@@ -46,17 +37,17 @@ const Faq = () => {
       {faqs.map((faq, index) => (
         <div
           key={index}
-          className="hs-accordion"
-          id={`hs-basic-with-title-and-arrow-stretched-heading-${index + 1}`}
+          className="border-b border-gray-200 dark:border-gray-700"
         >
           <button
-            className="hs-accordion-toggle py-3 inline-flex items-center justify-between gap-x-3 w-full font-semibold text-start text-gray-800 hover:text-gray-500 rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-200 dark:hover:text-neutral-400 dark:focus:outline-none dark:hs-accordion-active:text-white dark:focus:text-neutral-400"
-            aria-expanded="false"
-            aria-controls={`hs-basic-with-title-and-arrow-stretched-collapse-${index + 1}`}
+            className="py-3 inline-flex items-center justify-between gap-x-3 w-full font-semibold text-start text-gray-800 hover:text-gray-500 rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-200 dark:hover:text-neutral-400"
+            onClick={() => toggleAccordion(index)} // Toggle accordion saat tombol diklik
           >
             <span className="text-base sm:text-lg">{faq.question}</span>
             <svg
-              className="hs-accordion-active:hidden block size-4"
+              className={`size-4 transition-transform duration-300 ${
+                activeIndex === index ? "rotate-180" : ""
+              }`}
               xmlns="http://www.w3.org/2000/svg"
               width="24"
               height="24"
@@ -69,28 +60,13 @@ const Faq = () => {
             >
               <path d="m6 9 6 6 6-6"></path>
             </svg>
-            <svg
-              className="hs-accordion-active:block hidden size-4"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="m18 15-6-6-6 6"></path>
-            </svg>
           </button>
           <div
-            id={`hs-basic-with-title-and-arrow-stretched-collapse-${index + 1}`}
-            className="hs-accordion-content hidden w-full overflow-hidden transition-[height] duration-300"
-            role="region"
-            aria-labelledby={`hs-basic-with-title-and-arrow-stretched-heading-${index + 1}`}
+            className={`${
+              activeIndex === index ? "block" : "hidden"
+            } overflow-hidden transition-[height] duration-300`}
           >
-            <p className="text-gray-800 dark:text-neutral-200 text-base sm:text-lg">
+            <p className="text-gray-800 dark:text-neutral-200 text-base sm:text-lg py-4">
               {faq.answer}
             </p>
           </div>
