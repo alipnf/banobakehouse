@@ -5,6 +5,7 @@ import useAuthStore from "@/store/use-auth-store";
 
 const ErrorPage = () => {
   const { user } = useAuthStore();
+
   useEffect(() => {
     applyThemeFromLocalStorage();
   }, []);
@@ -19,17 +20,15 @@ const ErrorPage = () => {
         <h1 className="block text-7xl font-bold text-secondary dark:text-primary sm:text-9xl">
           404
         </h1>
-
         {/* Deskripsi */}
         <p className="mt-2 text-gray-600 dark:text-neutral-400">
           Halaman yang Anda cari tidak ditemukan.
         </p>
-
         {/* Tombol Kembali */}
         <div className="mt-5 flex flex-col justify-center items-center gap-2 sm:flex-row sm:gap-3">
           <Link
             className="w-full sm:w-auto py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-secondary text-primary hover:bg-opacity-90 focus:outline-none focus:bg-opacity-90 disabled:opacity-50 disabled:pointer-events-none"
-            to={user.role === "admin" ? "/admin" : "/"}
+            to={user?.role === "admin" ? "/admin" : "/"}
           >
             <svg
               className="shrink-0 size-4"
