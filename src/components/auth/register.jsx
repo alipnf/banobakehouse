@@ -1,8 +1,7 @@
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import useAuth from "@/hooks/use-auth";
-import GoogleIcon from "./google-icon";
-import "react-toastify/dist/ReactToastify.css";
+// import GoogleIcon from "./google-icon";
 
 const Register = () => {
   const {
@@ -16,7 +15,6 @@ const Register = () => {
     isLoading,
     authError,
     handleEmailRegister,
-    handleGoogleSignIn,
 
     isGoogleLoading,
   } = useAuth();
@@ -48,37 +46,37 @@ const Register = () => {
         </div>
 
         {/* Tombol Google Register */}
-        <div className="mt-5">
-          <button
-            type="button"
-            className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800"
-            onClick={handleGoogleSignIn}
-            disabled={isLoading || isGoogleLoading}
-          >
-            {isGoogleLoading ? (
-              <div
-                className="animate-spin inline-block size-4 border-[3px] border-current border-t-transparent text-dark rounded-full dark:text-light"
-                role="status"
-                aria-label="loading"
-              >
-                <span className="sr-only">Loading...</span>
-              </div>
-            ) : (
-              <>
-                <GoogleIcon />
-                Daftar dengan Google
-              </>
-            )}
-          </button>
-          <div className="py-3 flex items-center text-xs text-gray-400 uppercase before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6 dark:text-neutral-500">
-            Atau
-          </div>
-        </div>
+        {/* <div className="mt-5"> */}
+        {/*   <button */}
+        {/*     type="button" */}
+        {/*     className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" */}
+        {/*     onClick={handleGoogleSignIn} */}
+        {/*     disabled={isLoading || isGoogleLoading} */}
+        {/*   > */}
+        {/*     {isGoogleLoading ? ( */}
+        {/*       <div */}
+        {/*         className="animate-spin inline-block size-4 border-[3px] border-current border-t-transparent text-dark rounded-full dark:text-light" */}
+        {/*         role="status" */}
+        {/*         aria-label="loading" */}
+        {/*       > */}
+        {/*         <span className="sr-only">Loading...</span> */}
+        {/*       </div> */}
+        {/*     ) : ( */}
+        {/*       <> */}
+        {/*         <GoogleIcon /> */}
+        {/*         Daftar dengan Google */}
+        {/*       </> */}
+        {/*     )} */}
+        {/*   </button> */}
+        {/*   <div className="py-3 flex items-center text-xs text-gray-400 uppercase before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6 dark:text-neutral-500"> */}
+        {/*     Atau */}
+        {/*   </div> */}
+        {/* </div> */}
 
         {/* Formulir Pendaftaran */}
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="grid grid-cols-1 gap-4"
+          className="grid grid-cols-1 gap-4 mt-5"
         >
           {/* Username */}
           <div>

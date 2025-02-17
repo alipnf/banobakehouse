@@ -17,11 +17,11 @@ const useAuth = () => {
 
   const getErrorMessage = (errorCode) => {
     switch (errorCode) {
-      case "invalid_credentials":
+      case "Invalid login credentials":
         return "Username atau Password salah.";
       case "too_many_requests":
         return "Terlalu banyak percobaan gagal. Coba lagi nanti.";
-      case "email_already_exists":
+      case "User already registered":
         return "Email sudah digunakan.";
       case "password_too_weak":
         return "Password terlalu lemah. Gunakan minimal 8 karakter.";
