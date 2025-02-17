@@ -5,13 +5,13 @@ import {
   saveWebInfo,
   addSocialMedia,
   removeSocialMedia,
-} from "@/services/firebase/about-service";
+} from "@/services/supabase/about-service";
 
 const useWebInfo = () => {
   const [socialMedia, setSocialMedia] = useState([]);
   const [newPlatform, setNewPlatform] = useState("");
   const [newUrl, setNewUrl] = useState("");
-  const [initialData, setInitialData] = useState(null); // State untuk menyimpan data awal
+  const [initialData, setInitialData] = useState(null);
 
   const {
     handleSubmit,
@@ -20,72 +20,109 @@ const useWebInfo = () => {
     formState: { isValid },
     reset,
   } = useForm({
-    mode: "onChange", // Validasi dilakukan saat perubahan input
+    mode: "onChange",
   });
 
-  // Fetch data saat komponen dimuat
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getWebInfo();
-      if (data) {
-        const initialFormData = {
-          whatsapp: data.whatsapp || "",
-          email: data.email || "",
-          address: data.address || "",
-          grab: data.grab || "",
-        };
-        reset(initialFormData);
-        setInitialData(initialFormData); // Simpan data awal
-        setSocialMedia(data.socialMedia || []);
+      try {
+        const data = await getWebInfo();
+        if (data) {
+          const initialFormData = {
+            whatsapp: data.whatsapp || "",
+            email: data.email || "",
+            address: data.address || "",
+            grab: data.grab || "",
+          };
+          reset(initialFormData);
+          setInitialData({
+            ...initialFormData,
+            socialMedia: data.social_media || [],
+          });
+          setSocialMedia(data.social_media || []);
+        }
+      } catch (error) {
+        console.error("Gagal mengambil data:", error.message);
       }
     };
     fetchData();
   }, [reset]);
 
-  // Watch form values to detect changes
-  const formData = watch(); // Mendapatkan nilai terkini dari form
+  const formData = watch();
 
-  // Fungsi untuk memeriksa apakah ada perubahan data
   const hasChanges = () => {
     if (!initialData) return false;
-    return (
+
+    const isFormChanged =
       formData.whatsapp !== initialData.whatsapp ||
       formData.email !== initialData.email ||
       formData.address !== initialData.address ||
-      formData.grab !== initialData.grab ||
-      formData.grab !== initialData.grab ||
-      JSON.stringify(socialMedia) !== JSON.stringify(initialData.socialMedia)
+      formData.grab !== initialData.grab;
+
+    const isSocialMediaChanged = !arraysEqual(
+      socialMedia,
+      initialData.socialMedia,
+    );
+
+    return isFormChanged || isSocialMediaChanged;
+  };
+
+  const arraysEqual = (arr1, arr2) => {
+    if (arr1.length !== arr2.length) return false;
+    return arr1.every((item, index) =>
+      Object.keys(item).every((key) => item[key] === arr2[index][key]),
     );
   };
 
-  // Handle submit form utama
   const onSubmit = async () => {
-    if (!hasChanges()) return; // Jangan simpan jika tidak ada perubahan
-    await saveWebInfo({ ...formData, socialMedia });
-    alert("Data berhasil disimpan!");
-    setInitialData({ ...formData, socialMedia }); // Update data awal setelah disimpan
+    if (!hasChanges()) return;
+    try {
+      await saveWebInfo({ ...formData, social_media: socialMedia });
+      alert("Data berhasil disimpan!");
+      setInitialData({ ...formData, socialMedia });
+    } catch (error) {
+      console.error("Gagal menyimpan data:", error.message);
+      alert("Gagal menyimpan data. Silakan coba lagi.");
+    }
   };
 
-  // Handle tambah media sosial
   const handleAddSocialMedia = async (e) => {
     e.preventDefault();
     if (!newPlatform.trim() || !newUrl.trim()) return;
+
+    const isDuplicate = socialMedia.some(
+      (item) => item.platform === newPlatform && item.url === newUrl,
+    );
+    if (isDuplicate) {
+      alert("Media sosial sudah ada.");
+      return;
+    }
 
     const newSocialMediaItem = {
       id: Date.now().toString(),
       platform: newPlatform,
       url: newUrl,
     };
-    await addSocialMedia(newSocialMediaItem);
-    setSocialMedia((prev) => [...prev, newSocialMediaItem]);
-    setNewPlatform("");
-    setNewUrl("");
+
+    try {
+      await addSocialMedia(newSocialMediaItem);
+      setSocialMedia((prev) => [...prev, newSocialMediaItem]);
+      setNewPlatform("");
+      setNewUrl("");
+    } catch (error) {
+      console.error("Gagal menambahkan media sosial:", error.message);
+      alert("Gagal menambahkan media sosial. Silakan coba lagi.");
+    }
   };
 
-  // Handle hapus media sosial
   const handleRemoveSocialMedia = async (id) => {
-    await removeSocialMedia(id);
-    setSocialMedia((prev) => prev.filter((item) => item.id !== id));
+    try {
+      await removeSocialMedia(id);
+      setSocialMedia((prev) => prev.filter((item) => item.id !== id));
+    } catch (error) {
+      console.error("Gagal menghapus media sosial:", error.message);
+      alert("Gagal menghapus media sosial. Silakan coba lagi.");
+    }
   };
 
   return [

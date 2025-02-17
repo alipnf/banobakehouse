@@ -24,10 +24,10 @@ const WebInfo = () => {
         <h1 className="text-2xl font-bold text-secondary">Tentang Bano</h1>
         <button
           onClick={handleSubmit(onSubmit)}
-          disabled={!isValid || !hasChanges()} // Nonaktifkan tombol jika form tidak valid atau tidak ada perubahan
+          disabled={!isValid || !hasChanges()}
           className={`flex items-center px-4 py-2 ${
             isValid && hasChanges() ? "bg-secondary" : "bg-gray-300"
-          } text-white rounded-lg hover:bg-secondary/90 cursor-pointer`}
+          } text-white rounded-lg cursor-pointer`}
         >
           <Save className="w-5 h-5 mr-2" />
           Simpan Perubahan
@@ -46,7 +46,7 @@ const WebInfo = () => {
             <div className="space-y-4">
               {[
                 {
-                  label: "Nomor WhatsApp",
+                  label: "Nomor WhatsApp (awalan 62)",
                   name: "whatsapp",
                   icon: Phone,
                   rules: {
@@ -183,7 +183,7 @@ const WebInfo = () => {
                 </button>
                 <button
                   type="submit"
-                  disabled={!newPlatform.trim() || !newUrl.trim()} // Nonaktifkan tombol jika input kosong
+                  disabled={!newPlatform.trim() || !newUrl.trim()}
                   className={`px-3 py-1.5 ${
                     newPlatform.trim() && newUrl.trim()
                       ? "bg-secondary"
@@ -194,7 +194,7 @@ const WebInfo = () => {
                 </button>
               </div>
             </form>
-          </div>{" "}
+          </div>
           {/* Tabel Media Sosial */}
           <div className="overflow-auto">
             <table className="w-full min-w-[500px]">
