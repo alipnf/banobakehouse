@@ -4,8 +4,9 @@ import {
   getCategories,
   addCategoryItem,
   updateCategoryItem,
+  deleteCategoryItem,
   uploadImageAndGetUrl,
-} from "@/services/firebase/categories-service";
+} from "@/services/supabase/categories-service";
 
 const Categories = () => {
   const [categories, setCategories] = useState([]);
@@ -16,27 +17,39 @@ const Categories = () => {
   const [loading, setLoading] = useState(false); // State untuk loading saat upload
 
   useEffect(() => {
-    // Fungsi untuk mengambil data kategori dari Firestore
+    // Fungsi untuk mengambil data kategori dari Supabase
     const fetchCategories = async () => {
       try {
         const data = await getCategories();
-        setCategories(data.categories || []); // Simpan data ke state
+        setCategories(data.categories || []);
       } catch (error) {
         console.error("Error fetching categories:", error);
       }
     };
-
     fetchCategories();
   }, []);
 
-  const handleEdit = (categoryId) => {
-    setEditingCategory(categoryId);
+  const handleEdit = (category) => {
+    setEditingCategory(category);
     setShowForm(true);
+    setImagePreview(category.image); // Set preview gambar jika ada
   };
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
+      // Validasi tipe file
+      if (!file.type.startsWith("image/")) {
+        alert("Hanya file gambar yang diperbolehkan.");
+        return;
+      }
+
+      // Batasi ukuran file (misalnya maksimal 2MB)
+      if (file.size > 2 * 1024 * 1024) {
+        alert("Ukuran file tidak boleh lebih dari 2MB.");
+        return;
+      }
+
       setImageFile(file); // Simpan file gambar
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -49,29 +62,27 @@ const Categories = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
     try {
       // Dapatkan nilai dari form
       const name = e.target.name.value;
       const description = e.target.description.value;
 
-      // Upload gambar ke Firebase Storage jika ada file gambar
-      let imageUrl = null;
+      // Upload gambar ke Supabase Storage jika ada file gambar
+      let imageUrl = editingCategory?.image || ""; // Gunakan gambar lama jika tidak ada yang baru
       if (imageFile) {
-        imageUrl = await uploadImageAndGetUrl(imageFile); // Gunakan fungsi dari service
+        imageUrl = await uploadImageAndGetUrl(imageFile); // Unggah gambar baru
       }
 
       // Buat objek kategori baru
       const newCategory = {
-        id: editingCategory || Date.now(), // Gunakan ID yang ada atau buat baru
         name,
         description,
-        image: imageUrl || "", // Gunakan URL gambar atau kosong jika tidak ada
+        image: imageUrl,
       };
 
-      // Simpan kategori ke Firestore
+      // Simpan kategori ke Supabase
       if (editingCategory) {
-        await updateCategoryItem(editingCategory, newCategory);
+        await updateCategoryItem(editingCategory.id, newCategory);
       } else {
         await addCategoryItem(newCategory);
       }
@@ -81,10 +92,28 @@ const Categories = () => {
       setEditingCategory(null);
       setImagePreview(null);
       setImageFile(null);
+
+      // Refresh data kategori
+      const updatedData = await getCategories();
+      setCategories(updatedData.categories || []);
     } catch (error) {
       console.error("Error:", error);
+      alert("Terjadi kesalahan. Silakan coba lagi.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDelete = async (categoryId) => {
+    if (window.confirm("Apakah Anda yakin ingin menghapus kategori ini?")) {
+      try {
+        await deleteCategoryItem(categoryId);
+        setCategories((prev) => prev.filter((cat) => cat.id !== categoryId));
+        alert("Kategori berhasil dihapus!");
+      } catch (error) {
+        console.error("Gagal menghapus kategori:", error.message);
+        alert("Gagal menghapus kategori. Silakan coba lagi.");
+      }
     }
   };
 
@@ -100,6 +129,7 @@ const Categories = () => {
           Tambah Kategori
         </button>
       </div>
+
       {/* Form */}
       {showForm && (
         <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
@@ -114,6 +144,7 @@ const Categories = () => {
               <input
                 type="text"
                 name="name"
+                defaultValue={editingCategory?.name || ""}
                 className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
                 placeholder="Masukkan nama kategori"
                 required
@@ -125,6 +156,7 @@ const Categories = () => {
               </label>
               <textarea
                 name="description"
+                defaultValue={editingCategory?.description || ""}
                 className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
                 rows={3}
                 placeholder="Masukkan deskripsi kategori"
@@ -168,8 +200,8 @@ const Categories = () => {
                 onClick={() => {
                   setShowForm(false);
                   setEditingCategory(null);
-                  setImagePreview(null); // Reset preview gambar
-                  setImageFile(null); // Reset file gambar
+                  setImagePreview(null);
+                  setImageFile(null);
                 }}
                 className="px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50"
               >
@@ -190,6 +222,7 @@ const Categories = () => {
           </form>
         </div>
       )}
+
       {/* Categories Table */}
       <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
@@ -228,12 +261,15 @@ const Categories = () => {
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <div className="flex items-center justify-end space-x-2">
                       <button
-                        onClick={() => handleEdit(category.id)}
+                        onClick={() => handleEdit(category)}
                         className="p-2 text-secondary hover:bg-gray-100 rounded-lg"
                       >
                         <Edit2 className="w-4 h-4" />
                       </button>
-                      <button className="p-2 text-red-600 hover:bg-red-50 rounded-lg">
+                      <button
+                        onClick={() => handleDelete(category.id)}
+                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
+                      >
                         <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
