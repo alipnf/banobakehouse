@@ -1,3 +1,5 @@
+import { NavLink } from "react-router-dom";
+
 const HeroSection = () => {
   return (
     <div className="bg-light dark:bg-dark">
@@ -17,12 +19,13 @@ const HeroSection = () => {
             </p>
 
             <div className="mt-5 sm:mt-8 flex justify-center lg:justify-start">
-              <button
+              <NavLink
+                to="/product"
                 type="button"
                 className="py-3 px-5 text-sm sm:text-base font-medium rounded-lg bg-secondary text-white hover:bg-gray-900 focus:outline-none focus:bg-gray-900 dark:bg-light dark:text-dark"
               >
                 Mulai Pilih Kue
-              </button>
+              </NavLink>
             </div>
           </div>
 
