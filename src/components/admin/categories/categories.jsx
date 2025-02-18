@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
 import { Plus, Edit2, Trash2, Image as ImageIcon } from "lucide-react";
 import {
   getCategories,
@@ -9,15 +10,20 @@ import {
 } from "@/services/supabase/categories-service";
 
 const Categories = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm();
   const [categories, setCategories] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [editingCategory, setEditingCategory] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null); // State untuk preview gambar
-  const [imageFile, setImageFile] = useState(null); // State untuk menyimpan file gambar
-  const [loading, setLoading] = useState(false); // State untuk loading saat upload
+  const [imagePreview, setImagePreview] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Fungsi untuk mengambil data kategori dari Supabase
     const fetchCategories = async () => {
       try {
         const data = await getCategories();
@@ -29,51 +35,54 @@ const Categories = () => {
     fetchCategories();
   }, []);
 
+  useEffect(() => {
+    if (editingCategory) {
+      reset({
+        name: editingCategory.name,
+        description: editingCategory.description,
+      });
+      setImagePreview(editingCategory.image);
+    }
+  }, [editingCategory, reset]);
+
   const handleEdit = (category) => {
     setEditingCategory(category);
     setShowForm(true);
-    setImagePreview(category.image); // Set preview gambar jika ada
   };
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
-      // Validasi tipe file
       if (!file.type.startsWith("image/")) {
         alert("Hanya file gambar yang diperbolehkan.");
         return;
       }
 
-      // Batasi ukuran file (misalnya maksimal 2MB)
       if (file.size > 2 * 1024 * 1024) {
         alert("Ukuran file tidak boleh lebih dari 2MB.");
         return;
       }
 
-      setImageFile(file); // Simpan file gambar
+      setImageFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImagePreview(reader.result); // Set preview gambar
+        setImagePreview(reader.result);
       };
-      reader.readAsDataURL(file); // Baca file sebagai URL data
+      reader.readAsDataURL(file);
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmit = async (data) => {
     setLoading(true);
     try {
-      const name = e.target.name.value;
-      const description = e.target.description.value;
-
       let imageUrl = editingCategory?.image || "";
       if (imageFile) {
         imageUrl = await uploadImageAndGetUrl(imageFile);
       }
 
       const newCategory = {
-        name,
-        description,
+        name: data.name,
+        description: data.description,
         image: imageUrl,
       };
 
@@ -87,6 +96,7 @@ const Categories = () => {
       setEditingCategory(null);
       setImagePreview(null);
       setImageFile(null);
+      reset();
 
       const updatedData = await getCategories();
       setCategories(updatedData.categories || []);
@@ -97,6 +107,7 @@ const Categories = () => {
       setLoading(false);
     }
   };
+
   const handleDelete = async (categoryId) => {
     if (window.confirm("Apakah Anda yakin ingin menghapus kategori ini?")) {
       try {
@@ -123,38 +134,45 @@ const Categories = () => {
         </button>
       </div>
 
-      {/* Form */}
       {showForm && (
         <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
           <h2 className="text-lg font-semibold text-secondary mb-4">
             {editingCategory ? "Edit Kategori" : "Tambah Kategori Baru"}
           </h2>
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-secondary mb-1">
                 Nama Kategori
               </label>
               <input
                 type="text"
-                name="name"
-                defaultValue={editingCategory?.name || ""}
+                {...register("name", { required: "Nama kategori diperlukan" })}
                 className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
                 placeholder="Masukkan nama kategori"
-                required
               />
+              {errors.name && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.name.message}
+                </p>
+              )}
             </div>
             <div>
               <label className="block text-sm font-medium text-secondary mb-1">
                 Deskripsi
               </label>
               <textarea
-                name="description"
-                defaultValue={editingCategory?.description || ""}
+                {...register("description", {
+                  required: "Deskripsi diperlukan",
+                })}
                 className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
                 rows={3}
                 placeholder="Masukkan deskripsi kategori"
-                required
               />
+              {errors.description && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.description.message}
+                </p>
+              )}
             </div>
             <div>
               <label className="block text-sm font-medium text-secondary mb-1">
@@ -179,12 +197,20 @@ const Categories = () => {
                   Pilih Gambar
                 </label>
                 <input
+                  {...register("image", {
+                    required: "Gambar diperlukan",
+                  })}
                   id="image-upload"
                   type="file"
                   accept="image/*"
                   className="hidden"
                   onChange={handleImageUpload}
                 />
+                {errors.image && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.image.message}
+                  </p>
+                )}
               </div>
             </div>
             <div className="flex justify-end space-x-4">
@@ -195,6 +221,7 @@ const Categories = () => {
                   setEditingCategory(null);
                   setImagePreview(null);
                   setImageFile(null);
+                  reset();
                 }}
                 className="px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50"
               >
@@ -216,7 +243,7 @@ const Categories = () => {
         </div>
       )}
 
-      {/* Categories Table */}
+      {/* Categories Table (tetap sama seperti sebelumnya) */}
       <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
