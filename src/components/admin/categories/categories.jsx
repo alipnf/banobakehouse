@@ -63,37 +63,31 @@ const Categories = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      // Dapatkan nilai dari form
       const name = e.target.name.value;
       const description = e.target.description.value;
 
-      // Upload gambar ke Supabase Storage jika ada file gambar
-      let imageUrl = editingCategory?.image || ""; // Gunakan gambar lama jika tidak ada yang baru
+      let imageUrl = editingCategory?.image || "";
       if (imageFile) {
-        imageUrl = await uploadImageAndGetUrl(imageFile); // Unggah gambar baru
+        imageUrl = await uploadImageAndGetUrl(imageFile);
       }
 
-      // Buat objek kategori baru
       const newCategory = {
         name,
         description,
         image: imageUrl,
       };
 
-      // Simpan kategori ke Supabase
       if (editingCategory) {
         await updateCategoryItem(editingCategory.id, newCategory);
       } else {
         await addCategoryItem(newCategory);
       }
 
-      // Reset state
       setShowForm(false);
       setEditingCategory(null);
       setImagePreview(null);
       setImageFile(null);
 
-      // Refresh data kategori
       const updatedData = await getCategories();
       setCategories(updatedData.categories || []);
     } catch (error) {
@@ -103,7 +97,6 @@ const Categories = () => {
       setLoading(false);
     }
   };
-
   const handleDelete = async (categoryId) => {
     if (window.confirm("Apakah Anda yakin ingin menghapus kategori ini?")) {
       try {
