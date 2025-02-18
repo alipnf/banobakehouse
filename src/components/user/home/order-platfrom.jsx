@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getWebInfo } from "@/services/firebase/about-service";
+import { getWebInfo } from "@/services/supabase/about-service";
 import { toast } from "react-toastify";
 
 const OrderPlatforms = () => {

@@ -1,92 +1,26 @@
-import { useState, useEffect } from "react";
+import useCategories from "@/hooks/use-categories";
 import { Plus, Edit2, Trash2, Image as ImageIcon } from "lucide-react";
-import {
-  getCategories,
-  addCategoryItem,
-  updateCategoryItem,
-  uploadImageAndGetUrl,
-} from "@/services/firebase/categories-service";
 
 const Categories = () => {
-  const [categories, setCategories] = useState([]);
-  const [showForm, setShowForm] = useState(false);
-  const [editingCategory, setEditingCategory] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null); // State untuk preview gambar
-  const [imageFile, setImageFile] = useState(null); // State untuk menyimpan file gambar
-  const [loading, setLoading] = useState(false); // State untuk loading saat upload
-
-  useEffect(() => {
-    // Fungsi untuk mengambil data kategori dari Firestore
-    const fetchCategories = async () => {
-      try {
-        const data = await getCategories();
-        setCategories(data.categories || []); // Simpan data ke state
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      }
-    };
-
-    fetchCategories();
-  }, []);
-
-  const handleEdit = (categoryId) => {
-    setEditingCategory(categoryId);
-    setShowForm(true);
-  };
-
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setImageFile(file); // Simpan file gambar
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result); // Set preview gambar
-      };
-      reader.readAsDataURL(file); // Baca file sebagai URL data
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-
-    try {
-      // Dapatkan nilai dari form
-      const name = e.target.name.value;
-      const description = e.target.description.value;
-
-      // Upload gambar ke Firebase Storage jika ada file gambar
-      let imageUrl = null;
-      if (imageFile) {
-        imageUrl = await uploadImageAndGetUrl(imageFile); // Gunakan fungsi dari service
-      }
-
-      // Buat objek kategori baru
-      const newCategory = {
-        id: editingCategory || Date.now(), // Gunakan ID yang ada atau buat baru
-        name,
-        description,
-        image: imageUrl || "", // Gunakan URL gambar atau kosong jika tidak ada
-      };
-
-      // Simpan kategori ke Firestore
-      if (editingCategory) {
-        await updateCategoryItem(editingCategory, newCategory);
-      } else {
-        await addCategoryItem(newCategory);
-      }
-
-      // Reset state
-      setShowForm(false);
-      setEditingCategory(null);
-      setImagePreview(null);
-      setImageFile(null);
-    } catch (error) {
-      console.error("Error:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const {
+    showForm,
+    setShowForm,
+    editingCategory,
+    setEditingCategory,
+    categories,
+    imagePreview,
+    loading,
+    register,
+    handleSubmit,
+    errors,
+    reset,
+    handleEdit,
+    handleImageUpload,
+    onSubmit,
+    handleDelete,
+    setImagePreview,
+    setImageFile,
+  } = useCategories();
 
   return (
     <div className="space-y-6">
@@ -100,36 +34,46 @@ const Categories = () => {
           Tambah Kategori
         </button>
       </div>
-      {/* Form */}
+
       {showForm && (
         <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
           <h2 className="text-lg font-semibold text-secondary mb-4">
             {editingCategory ? "Edit Kategori" : "Tambah Kategori Baru"}
           </h2>
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-secondary mb-1">
                 Nama Kategori
               </label>
               <input
                 type="text"
-                name="name"
+                {...register("name", { required: "Nama kategori diperlukan" })}
                 className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
                 placeholder="Masukkan nama kategori"
-                required
               />
+              {errors.name && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.name.message}
+                </p>
+              )}
             </div>
             <div>
               <label className="block text-sm font-medium text-secondary mb-1">
                 Deskripsi
               </label>
               <textarea
-                name="description"
+                {...register("description", {
+                  required: "Deskripsi diperlukan",
+                })}
                 className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
                 rows={3}
                 placeholder="Masukkan deskripsi kategori"
-                required
               />
+              {errors.description && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.description.message}
+                </p>
+              )}
             </div>
             <div>
               <label className="block text-sm font-medium text-secondary mb-1">
@@ -154,12 +98,20 @@ const Categories = () => {
                   Pilih Gambar
                 </label>
                 <input
+                  {...register("image", {
+                    required: "Gambar diperlukan",
+                  })}
                   id="image-upload"
                   type="file"
                   accept="image/*"
                   className="hidden"
                   onChange={handleImageUpload}
                 />
+                {errors.image && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.image.message}
+                  </p>
+                )}
               </div>
             </div>
             <div className="flex justify-end space-x-4">
@@ -168,8 +120,9 @@ const Categories = () => {
                 onClick={() => {
                   setShowForm(false);
                   setEditingCategory(null);
-                  setImagePreview(null); // Reset preview gambar
-                  setImageFile(null); // Reset file gambar
+                  setImagePreview(null);
+                  setImageFile(null);
+                  reset();
                 }}
                 className="px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50"
               >
@@ -190,7 +143,8 @@ const Categories = () => {
           </form>
         </div>
       )}
-      {/* Categories Table */}
+
+      {/* Categories Table (tetap sama seperti sebelumnya) */}
       <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
@@ -228,12 +182,15 @@ const Categories = () => {
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <div className="flex items-center justify-end space-x-2">
                       <button
-                        onClick={() => handleEdit(category.id)}
+                        onClick={() => handleEdit(category)}
                         className="p-2 text-secondary hover:bg-gray-100 rounded-lg"
                       >
                         <Edit2 className="w-4 h-4" />
                       </button>
-                      <button className="p-2 text-red-600 hover:bg-red-50 rounded-lg">
+                      <button
+                        onClick={() => handleDelete(category.id)}
+                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
+                      >
                         <Trash2 className="w-4 h-4" />
                       </button>
                     </div>

@@ -29,6 +29,7 @@ const FAQ = () => {
               setError("Maksimal 5 FAQ. Hapus salah satu FAQ terlebih dahulu.");
             } else {
               setShowForm(true);
+              reset(); // Reset form jika menambah FAQ baru
             }
           }}
           className="flex items-center px-4 py-2 bg-secondary text-white rounded-lg hover:bg-secondary/90"
@@ -125,43 +126,54 @@ const FAQ = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {faqs.map((faq) => (
-                <tr key={faq.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 max-w-[200px]">
-                    <div className="text-sm font-medium text-secondary truncate">
-                      {faq.question}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 max-w-[300px]">
-                    <div className="text-sm text-secondary truncate">
-                      {faq.answer}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium w-[80px]">
-                    <div className="flex items-center justify-end space-x-2">
-                      <button
-                        onClick={() => {
-                          setEditingFaq(faq.id);
-                          reset({
-                            question: faq.question,
-                            answer: faq.answer,
-                          });
-                          setShowForm(true);
-                        }}
-                        className="p-2 text-secondary hover:bg-gray-100 rounded-lg"
-                      >
-                        <Edit2 className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(faq.id)}
-                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
+              {faqs.length > 0 ? (
+                faqs.map((faq) => (
+                  <tr key={faq.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 max-w-[200px]">
+                      <div className="text-sm font-medium text-secondary truncate">
+                        {faq.question}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 max-w-[300px]">
+                      <div className="text-sm text-secondary truncate">
+                        {faq.answer}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium w-[80px]">
+                      <div className="flex items-center justify-end space-x-2">
+                        <button
+                          onClick={() => {
+                            setEditingFaq(faq); // Set FAQ yang sedang diedit
+                            reset({
+                              question: faq.question,
+                              answer: faq.answer,
+                            });
+                            setShowForm(true);
+                          }}
+                          className="p-2 text-secondary hover:bg-gray-100 rounded-lg"
+                        >
+                          <Edit2 className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(faq.id)}
+                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan="3"
+                    className="px-6 py-4 text-center text-gray-500"
+                  >
+                    Tidak ada FAQ yang tersedia.
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>

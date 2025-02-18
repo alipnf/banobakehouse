@@ -1,4 +1,4 @@
-import { getFAQ } from "@/services/firebase/faq-service";
+import { getAllFaqs } from "@/services/supabase/faq-service";
 import { useEffect, useState } from "react";
 
 const Faq = () => {
@@ -8,10 +8,8 @@ const Faq = () => {
   useEffect(() => {
     const fetchFAQs = async () => {
       try {
-        const faqData = await getFAQ();
-        if (faqData && faqData.faqs) {
-          setFaqs(faqData.faqs);
-        }
+        const faqData = await getAllFaqs();
+        setFaqs(faqData);
       } catch (error) {
         console.error("Error fetching FAQs:", error);
       }

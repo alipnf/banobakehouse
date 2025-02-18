@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { serviceLogout } from "@/services/firebase/auth-service";
+import { serviceLogout } from "@/services/supabase/auth-service";
 
 const useAuthStore = create(
   persist(

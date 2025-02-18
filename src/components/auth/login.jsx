@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import useAuth from "../../hooks/use-auth";
-import GoogleIcon from "./google-icon";
+// import GoogleIcon from "./google-icon";
 
 const Login = () => {
   const {
@@ -11,13 +11,8 @@ const Login = () => {
   } = useForm();
 
   // Gunakan custom hook untuk logika autentikasi
-  const {
-    isLoading,
-    isGoogleLoading,
-    authError,
-    handleEmailPasswordLogin,
-    handleGoogleSignIn,
-  } = useAuth();
+  const { isLoading, isGoogleLoading, authError, handleEmailPasswordLogin } =
+    useAuth();
 
   // Fungsi onSubmit untuk login email/password
   const onSubmit = (data) => {
@@ -25,9 +20,9 @@ const Login = () => {
   };
 
   // Fungsi untuk login Google
-  const onGoogleLogin = () => {
-    handleGoogleSignIn();
-  };
+  // const onGoogleLogin = () => {
+  //   handleGoogleSignIn();
+  // };
 
   return (
     <div className="mt-7 bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-neutral-900 dark:border-neutral-700 max-w-sm md:max-w-lg mx-auto">
@@ -49,36 +44,36 @@ const Login = () => {
         </div>
 
         {/* Tombol Google Login */}
-        <div className="mt-5">
-          <button
-            type="button"
-            className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800"
-            onClick={onGoogleLogin}
-            disabled={isLoading || isGoogleLoading}
-          >
-            {isGoogleLoading ? (
-              <div
-                className="animate-spin inline-block size-4 border-[3px] border-current border-t-transparent text-dark rounded-full dark:text-light"
-                role="status"
-                aria-label="loading"
-              >
-                <span className="sr-only">Loading...</span>
-              </div>
-            ) : (
-              <>
-                <GoogleIcon />
-                Masuk dengan Google
-              </>
-            )}
-          </button>
-          <div className="py-3 flex items-center text-xs text-gray-400 uppercase before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6 dark:text-neutral-500">
-            Atau
-          </div>
-        </div>
+        {/* <div className="mt-5"> */}
+        {/*   <button */}
+        {/*     type="button" */}
+        {/*     className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" */}
+        {/*     onClick={onGoogleLogin} */}
+        {/*     disabled={isLoading || isGoogleLoading} */}
+        {/*   > */}
+        {/*     {isGoogleLoading ? ( */}
+        {/*       <div */}
+        {/*         className="animate-spin inline-block size-4 border-[3px] border-current border-t-transparent text-dark rounded-full dark:text-light" */}
+        {/*         role="status" */}
+        {/*         aria-label="loading" */}
+        {/*       > */}
+        {/*         <span className="sr-only">Loading...</span> */}
+        {/*       </div> */}
+        {/*     ) : ( */}
+        {/*       <> */}
+        {/*         <GoogleIcon /> */}
+        {/*         Masuk dengan Google */}
+        {/*       </> */}
+        {/*     )} */}
+        {/*   </button> */}
+        {/*   <div className="py-3 flex items-center text-xs text-gray-400 uppercase before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6 dark:text-neutral-500"> */}
+        {/*     Atau */}
+        {/*   </div> */}
+        {/* </div> */}
 
         {/* Formulir Login */}
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="grid gap-y-4">
+          <div className="grid gap-y-4 mt-5">
             {/* Email */}
             <div>
               <label
