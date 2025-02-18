@@ -1,51 +1,24 @@
+import { getCategories } from "@/services/supabase/categories-service";
+import { useEffect, useState } from "react";
+
 import CardCategory from "./card-category";
 
-const categories = [
-  {
-    id: 1,
-    title: "Kue Pernikahan",
-    subtitle: "Koleksi Kue Pernikahan Mewah",
-    image:
-      "https://images.unsplash.com/photo-1519654793190-2e8a4806f1f2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80",
-  },
-  {
-    id: 2,
-    title: "Kue Ulang Tahun",
-    subtitle: "Kue Ulang Tahun Spesial",
-    image:
-      "https://images.unsplash.com/photo-1558301211-0d8c8ddee6ec?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80",
-  },
-  {
-    id: 3,
-    title: "Kue Kering",
-    subtitle: "Aneka Kue Kering Premium",
-    image:
-      "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80",
-  },
-  {
-    id: 4,
-    title: "Kue Coklat",
-    subtitle: "Manis dan Lezat untuk Segala Acara",
-    image:
-      "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80",
-  },
-  {
-    id: 5,
-    title: "Cupcake",
-    subtitle: "Kecil, Imut, dan Nikmat",
-    image:
-      "https://images.unsplash.com/photo-1558301211-0d8c8ddee6ec?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80",
-  },
-  {
-    id: 6,
-    title: "Donat",
-    subtitle: "Berbagai Varian Rasa yang Menggoda",
-    image:
-      "https://images.unsplash.com/photo-1519654793190-2e8a4806f1f2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80",
-  },
-];
-
 const CategoryList = () => {
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    const fetchFAQs = async () => {
+      try {
+        const categoriesData = await getCategories();
+        const { categories } = categoriesData;
+        setCategories(categories);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+    fetchFAQs();
+  }, []);
+
   return (
     <section className="py-12 bg-gray-50 dark:bg-dark">
       <div className="max-w-7xl mx-auto px-4">
