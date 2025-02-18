@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Mail, Phone, MapPin } from "lucide-react";
-import { getWebInfo } from "@/services/firebase/about-service";
+import { getWebInfo } from "@/services/supabase/about-service";
 
 const Footer = () => {
   const [webInfo, setWebInfo] = useState(null);
@@ -39,6 +39,7 @@ const Footer = () => {
               pilihan kue berkualitas untuk setiap momen spesial Anda.
             </p>
           </div>
+
           {/* Contact Section */}
           <div>
             <h3 className="text-sm font-semibold text-gray-800 dark:text-neutral-200 uppercase">
@@ -55,7 +56,7 @@ const Footer = () => {
                 <Phone className="h-5 w-5 mr-3" />
                 {loading
                   ? "Loading..."
-                  : webInfo?.whatsapp || "Nomor tidak tersedia"}
+                  : "+" + webInfo?.whatsapp || "Nomor tidak tersedia"}
               </li>
               <li className="flex items-center">
                 <Mail className="h-5 w-5 mr-3" />
@@ -65,6 +66,7 @@ const Footer = () => {
               </li>
             </ul>
           </div>
+
           {/* Social Media Section */}
           <div>
             <h3 className="text-sm font-semibold text-gray-800 dark:text-neutral-200 uppercase">
@@ -73,8 +75,8 @@ const Footer = () => {
             <div className="mt-3 flex flex-wrap gap-4 text-gray-500 dark:text-neutral-400 text-sm">
               {loading ? (
                 <span>Loading...</span>
-              ) : webInfo?.socialMedia?.length > 0 ? (
-                webInfo.socialMedia.map((item, index) => (
+              ) : webInfo?.social_media?.length > 0 ? (
+                webInfo.social_media.map((item, index) => (
                   <a
                     key={index}
                     href={item.url}
@@ -91,6 +93,7 @@ const Footer = () => {
             </div>
           </div>
         </div>
+
         {/* Copyright Section */}
         <div className="mt-6 sm:mt-8 border-t border-gray-200 dark:border-neutral-700 pt-6 sm:pt-8">
           <p className="text-center text-gray-500 dark:text-neutral-400 text-sm">
