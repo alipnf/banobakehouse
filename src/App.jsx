@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { AdminRoutes, QuestRoutes, UserRoutes } from "./routes";
+import { AdminRoutes, GuestRoutes, UserRoutes } from "./routes";
 import { ToastContainer } from "react-toastify";
 import ErrorPage from "./pages/error/error-page";
 import { useEffect } from "react";
@@ -25,7 +25,7 @@ const App = () => {
 
       <Routes>
         {UserRoutes()}
-        {QuestRoutes()}
+        {GuestRoutes()}
         {AdminRoutes()}
         <Route path="*" element={<ErrorPage />} />
       </Routes>
