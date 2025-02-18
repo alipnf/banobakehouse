@@ -12,6 +12,7 @@ export const getCategories = async () => {
   }
 };
 
+// Fungsi untuk menambahkan kategori baru
 export const addCategoryItem = async (category) => {
   try {
     const { data, error } = await supabase
@@ -40,12 +41,13 @@ export const updateCategoryItem = async (id, updatedCategory) => {
 
     // Jika ada gambar lama, hapus dari bucket
     if (existingCategory?.image) {
-      const imagePath = new URL(existingCategory.image).pathname
-        .split("/")
-        .pop(); // Ambil nama file dari URL
+      const urlParts = new URL(existingCategory.image).pathname.split("/");
+      const folderName = urlParts[urlParts.length - 2]; // Nama folder (misalnya "categories")
+      const fileName = urlParts[urlParts.length - 1]; // Nama file
+      const fullPath = `${folderName}/${fileName}`;
       const { error: deleteError } = await supabase.storage
         .from("images")
-        .remove([imagePath]);
+        .remove([fullPath]);
       if (deleteError) throw deleteError;
     }
 
@@ -78,10 +80,13 @@ export const deleteCategoryItem = async (id) => {
 
     // Hapus gambar dari bucket jika ada
     if (category?.image) {
-      const imagePath = new URL(category.image).pathname.split("/").pop(); // Ambil nama file dari URL
+      const urlParts = new URL(category.image).pathname.split("/");
+      const folderName = urlParts[urlParts.length - 2]; // Nama folder (misalnya "categories")
+      const fileName = urlParts[urlParts.length - 1]; // Nama file
+      const fullPath = `${folderName}/${fileName}`;
       const { error: deleteError } = await supabase.storage
         .from("images")
-        .remove([imagePath]);
+        .remove([fullPath]);
       if (deleteError) throw deleteError;
     }
 
@@ -97,7 +102,11 @@ export const deleteCategoryItem = async (id) => {
 // Fungsi untuk mengupload gambar ke bucket "images" dan mendapatkan URL-nya
 export const uploadImageAndGetUrl = async (file) => {
   try {
-    const fileName = `${Date.now()}-${file.name}`; // Generate nama unik untuk file
+    // Tentukan folder dan nama file unik
+    const folderName = "categories"; // Nama folder untuk kategori
+    const fileName = `${folderName}/${Date.now()}-${file.name}`; // Path dengan folder
+
+    // Upload file ke bucket dengan folder
     const { data: uploadData, error: uploadError } = await supabase.storage
       .from("images") // Nama bucket
       .upload(fileName, file, {
