@@ -1,7 +1,9 @@
+import Products from "@/components/admin/products/products";
+
 const ProductsPage = () => {
   return (
     <div>
-      <h1>najya</h1>
+      <Products />
     </div>
   );
 };
