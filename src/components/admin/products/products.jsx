@@ -1,129 +1,30 @@
-import { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
+import useProducts from "@/hooks/use-products";
 import { Plus, Edit2, Trash2, ImageIcon } from "lucide-react";
-import { getCategories } from "@/services/supabase/categories-service";
-
-const productsData = [
-  {
-    id: 1,
-    name: "Chocolate Heaven",
-    category: "Specialty",
-    price: 250000,
-    stock: 15,
-    status: "Tersedia",
-    image:
-      "https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1089&q=80",
-  },
-  // ...data produk lainnya
-];
 
 const Products = () => {
-  const [products, setProducts] = useState(productsData);
-  const [categories, setCategories] = useState([]);
-  const [loadingCategories, setLoadingCategories] = useState(true);
-  const [errorCategories, setErrorCategories] = useState(null);
-
-  const [showForm, setShowForm] = useState(false);
-  const [editingProduct, setEditingProduct] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null);
-  const [imageFile, setImageFile] = useState(null);
-  const [loading, setLoading] = useState(false);
-
   const {
+    showForm,
+    setShowForm,
+    editingProduct,
+    setEditingProduct,
+    products,
+    categories,
+    loadingCategories,
+    errorCategories,
+    imagePreview,
     register,
     handleSubmit,
     reset,
-    formState: { errors },
-  } = useForm();
-
-  // Mengambil data kategori dari Supabase
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const { categories: fetchedCategories } = await getCategories();
-        if (fetchedCategories.length === 0) {
-          setErrorCategories(
-            "Tidak ada kategori tersedia. Silakan tambah kategori terlebih dahulu.",
-          );
-        } else {
-          setCategories(fetchedCategories);
-        }
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-        setErrorCategories("Gagal memuat kategori.");
-      } finally {
-        setLoadingCategories(false);
-      }
-    };
-
-    fetchCategories();
-  }, []);
-
-  const formatPrice = (price) => {
-    if (!price) return "Rp0";
-    return new Intl.NumberFormat("id-ID", {
-      style: "currency",
-      currency: "IDR",
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(price);
-  };
-
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file && file.type.startsWith("image/")) {
-      setImageFile(file);
-      setImagePreview(URL.createObjectURL(file));
-    } else {
-      alert("Silakan pilih file gambar.");
-    }
-  };
-
-  const onSubmit = (data) => {
-    setLoading(true);
-
-    setTimeout(() => {
-      const newProduct = {
-        id: editingProduct ? editingProduct.id : Date.now(),
-        name: data.name,
-        category: data.category,
-        price: parseInt(data.price),
-        stock: parseInt(data.stock),
-        status: data.status,
-        image: imageFile
-          ? URL.createObjectURL(imageFile)
-          : editingProduct?.image,
-      };
-
-      if (editingProduct) {
-        setProducts((prev) =>
-          prev.map((product) =>
-            product.id === editingProduct.id ? newProduct : product,
-          ),
-        );
-      } else {
-        setProducts((prev) => [...prev, newProduct]);
-      }
-
-      setLoading(false);
-      setShowForm(false);
-      setEditingProduct(null);
-      setImagePreview(null);
-      setImageFile(null);
-      reset();
-    }, 1000);
-  };
-
-  const handleEdit = (product) => {
-    setEditingProduct(product);
-    setShowForm(true);
-  };
-
-  const handleDelete = (id) => {
-    if (window.confirm("Apakah Anda yakin ingin menghapus produk ini?")) {
-      setProducts((prev) => prev.filter((product) => product.id !== id));
-    }
-  };
+    errors,
+    onSubmit,
+    handleImageUpload,
+    formatPrice,
+    handleEdit,
+    handleDelete,
+    loading,
+    setImagePreview,
+    setImageFile,
+  } = useProducts();
 
   return (
     <div className="space-y-6">
