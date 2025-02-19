@@ -152,6 +152,14 @@ const useProducts = () => {
   // Handle edit produk
   const handleEdit = (product) => {
     setEditingProduct(product);
+
+    // Set image preview jika produk memiliki gambar
+    if (product.image) {
+      setImagePreview(product.image);
+    } else {
+      setImagePreview(null); // Kosongkan preview jika tidak ada gambar
+    }
+
     setShowForm(true);
   };
 
