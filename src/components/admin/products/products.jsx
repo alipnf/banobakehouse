@@ -1,5 +1,5 @@
-import useProducts from "@/hooks/use-products";
 import { Plus, Edit2, Trash2, ImageIcon } from "lucide-react";
+import useProducts from "@/hooks/use-products";
 
 const Products = () => {
   const {
@@ -19,11 +19,16 @@ const Products = () => {
     onSubmit,
     handleImageUpload,
     formatPrice,
-    handleEdit,
     handleDelete,
     loading,
     setImagePreview,
     setImageFile,
+    variants,
+    addVariant,
+    removeVariant,
+    handleEditProduct,
+    handleAddProduct,
+    setVariants,
   } = useProducts();
 
   return (
@@ -33,7 +38,7 @@ const Products = () => {
         <h1 className="text-2xl font-bold text-secondary">Produk</h1>
         <button
           className="flex items-center px-4 py-2 bg-secondary text-white rounded-lg hover:bg-secondary/90"
-          onClick={() => setShowForm(true)}
+          onClick={handleAddProduct}
         >
           <Plus className="w-5 h-5 mr-2" />
           Tambah Produk
@@ -47,6 +52,7 @@ const Products = () => {
             {editingProduct ? "Edit Produk" : "Tambah Produk Baru"}
           </h2>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            {/* Nama Produk */}
             <div>
               <label className="block text-sm font-medium text-secondary mb-1">
                 Nama Produk
@@ -64,6 +70,8 @@ const Products = () => {
                 </p>
               )}
             </div>
+
+            {/* Kategori */}
             <div>
               <label className="block text-sm font-medium text-secondary mb-1">
                 Kategori
@@ -109,40 +117,66 @@ const Products = () => {
                 </p>
               )}
             </div>
+
+            {/* Variasi Harga */}
             <div>
               <label className="block text-sm font-medium text-secondary mb-1">
-                Harga
+                Variasi Harga
               </label>
-              <input
-                type="number"
-                {...register("price", { required: "Harga diperlukan" })}
-                defaultValue={editingProduct?.price}
-                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
-                placeholder="Masukkan harga"
-              />
-              {errors.price && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.price.message}
-                </p>
-              )}
+              {variants.map((variant, index) => (
+                <div key={index} className="flex items-center space-x-4 mb-2">
+                  {/* Input Nama Varian */}
+                  <input
+                    type="text"
+                    value={variant.name}
+                    onChange={(e) =>
+                      setVariants((prev) =>
+                        prev.map((v, i) =>
+                          i === index ? { ...v, name: e.target.value } : v,
+                        ),
+                      )
+                    }
+                    placeholder="Nama Varian (misal: Custom Size)"
+                    className="w-32 px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
+                  />
+
+                  {/* Input Harga Varian */}
+                  <input
+                    type="number"
+                    value={variant.price}
+                    onChange={(e) =>
+                      setVariants((prev) =>
+                        prev.map((v, i) =>
+                          i === index ? { ...v, price: e.target.value } : v,
+                        ),
+                      )
+                    }
+                    placeholder="Harga"
+                    className="w-32 px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
+                  />
+
+                  {/* Tombol Hapus Varian */}
+                  <button
+                    type="button"
+                    onClick={() => removeVariant(index)}
+                    className="px-2 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600"
+                  >
+                    Hapus
+                  </button>
+                </div>
+              ))}
+
+              {/* Tombol Tambah Varian */}
+              <button
+                type="button"
+                onClick={addVariant}
+                className="px-3 py-2 bg-secondary text-white rounded-lg hover:bg-secondary/90"
+              >
+                Tambah Varian
+              </button>
             </div>
-            <div>
-              <label className="block text-sm font-medium text-secondary mb-1">
-                Stok
-              </label>
-              <input
-                type="number"
-                {...register("stock", { required: "Stok diperlukan" })}
-                defaultValue={editingProduct?.stock}
-                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
-                placeholder="Masukkan stok"
-              />
-              {errors.stock && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.stock.message}
-                </p>
-              )}
-            </div>
+
+            {/* Status */}
             <div>
               <label className="block text-sm font-medium text-secondary mb-1">
                 Status
@@ -161,6 +195,8 @@ const Products = () => {
                 </p>
               )}
             </div>
+
+            {/* Gambar */}
             <div>
               <label className="block text-sm font-medium text-secondary mb-1">
                 Gambar
@@ -198,6 +234,8 @@ const Products = () => {
                 )}
               </div>
             </div>
+
+            {/* Tombol Simpan/Batal */}
             <div className="flex justify-end space-x-4">
               <button
                 type="button"
@@ -207,6 +245,7 @@ const Products = () => {
                   setImagePreview(null);
                   setImageFile(null);
                   reset();
+                  setVariants([{ name: "", price: "" }]);
                 }}
                 className="px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50"
               >
@@ -246,7 +285,7 @@ const Products = () => {
                 <th className="px-6 py-3 text-left text-xs font-medium text-secondary/70 uppercase tracking-wider">
                   Status
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-secondary/70 uppercase tracking-wider">
+                <th className="px-6 py-3 text-right text-xs font-medium text-secondary/70 uppercase tracking-wider">
                   Aksi
                 </th>
               </tr>
@@ -270,7 +309,11 @@ const Products = () => {
                     {product.category}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-secondary">
-                    {formatPrice(product.price)}
+                    {product.variants.map((variant, index) => (
+                      <div key={index}>
+                        {variant.name}: {formatPrice(variant.price)}
+                      </div>
+                    ))}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span
@@ -278,7 +321,6 @@ const Products = () => {
                         px-2 py-1 text-xs font-medium rounded-full
                         ${product.status === "Tersedia" ? "bg-green-100 text-green-800" : ""}
                         ${product.status === "Habis" ? "bg-red-100 text-red-800" : ""}
-                        ${!["Tersedia", "Habis"].includes(product.status) ? "bg-gray-100 text-gray-800" : ""}
                       `}
                     >
                       {product.status}
@@ -288,7 +330,7 @@ const Products = () => {
                     <div className="flex items-center justify-end space-x-2">
                       <button
                         className="p-2 text-secondary hover:bg-gray-100 rounded-lg"
-                        onClick={() => handleEdit(product)}
+                        onClick={() => handleEditProduct(product)}
                       >
                         <Edit2 className="w-4 h-4" />
                       </button>

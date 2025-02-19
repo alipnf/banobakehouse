@@ -14,6 +14,9 @@ const useProducts = () => {
   const [products, setProducts] = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
   const [errorProducts, setErrorProducts] = useState(null);
+  const [variants, setVariants] = useState([
+    { name: "", price: "" }, // Default satu varian kosong
+  ]);
 
   // State untuk kategori
   const [categories, setCategories] = useState([]);
@@ -97,6 +100,16 @@ const useProducts = () => {
     }
   };
 
+  // Tambah varian baru
+  const addVariant = () => {
+    setVariants((prev) => [...prev, { name: "", price: "" }]);
+  };
+
+  // Hapus varian berdasarkan indeks
+  const removeVariant = (index) => {
+    setVariants((prev) => prev.filter((_, i) => i !== index));
+  };
+
   // Handle submit form (tambah/edit produk)
   const onSubmit = async (data) => {
     setLoading(true);
@@ -112,8 +125,10 @@ const useProducts = () => {
       const newProduct = {
         name: data.name,
         category: data.category,
-        price: parseInt(data.price),
-        stock: parseInt(data.stock),
+        variants: variants.map((variant) => ({
+          name: variant.name,
+          price: parseInt(variant.price),
+        })),
         status: data.status,
         image: imageUrl,
       };
@@ -140,6 +155,7 @@ const useProducts = () => {
       setEditingProduct(null);
       setImagePreview(null);
       setImageFile(null);
+      setVariants([{ name: "", price: "" }]); // Reset varian ke default
       reset();
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -149,15 +165,15 @@ const useProducts = () => {
     }
   };
 
-  // Handle edit produk
-  const handleEdit = (product) => {
+  // Fungsi untuk membuka form edit
+  const handleEditProduct = (product) => {
     setEditingProduct(product);
 
-    // Set image preview jika produk memiliki gambar
-    if (product.image) {
-      setImagePreview(product.image);
+    // Set variants dari produk yang sedang diedit
+    if (product.variants && product.variants.length > 0) {
+      setVariants(product.variants);
     } else {
-      setImagePreview(null); // Kosongkan preview jika tidak ada gambar
+      setVariants([{ name: "", price: "" }]); // Reset ke satu varian kosong
     }
 
     setShowForm(true);
@@ -174,6 +190,15 @@ const useProducts = () => {
         alert("Terjadi kesalahan saat menghapus produk.");
       }
     }
+  };
+
+  // Fungsi untuk membuka form tambah produk
+  const handleAddProduct = () => {
+    setEditingProduct(null); // Reset editingProduct
+    setVariants([{ name: "", price: "" }]); // Reset ke satu varian kosong
+    setImagePreview(null); // Reset preview gambar
+    setImageFile(null); // Reset file gambar
+    setShowForm(true);
   };
 
   return {
@@ -200,8 +225,13 @@ const useProducts = () => {
     onSubmit,
     handleImageUpload,
     formatPrice,
-    handleEdit,
     handleDelete,
+    addVariant,
+    removeVariant,
+    variants,
+    setVariants,
+    handleEditProduct,
+    handleAddProduct,
   };
 };
 
