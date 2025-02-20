@@ -1,71 +1,38 @@
+import { getCategories } from "@/services/supabase/categories-service";
 import { CategorySidebar, Pagination, ProductCard, SearchAndSort } from "./";
-import { useState } from "react";
-
-const products = [
-  {
-    id: 1,
-    name: "Chocolate Heaven",
-    category: "Specialty",
-    price: 250000,
-    rating: 4.8,
-    reviews: 120,
-    image:
-      "https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1089&q=80",
-    description:
-      "Kue cokelat premium dengan lapisan ganache yang lembut dan hiasan cokelat Belgian berkualitas tinggi. Sempurna untuk pecinta cokelat sejati.",
-    sizes: ["16cm", "20cm", "24cm"],
-  },
-  {
-    id: 2,
-    name: "Strawberry Delight",
-    category: "Specialty",
-    price: 275000,
-    rating: 4.7,
-    reviews: 112,
-    image:
-      "https://images.unsplash.com/photo-1565958011703-44f9829ba187?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80",
-    description:
-      "Kue vanilla lembut dengan lapisan krim stroberi segar dan potongan buah stroberi pilihan. Cocok untuk pencinta buah.",
-    sizes: ["16cm", "20cm", "24cm"],
-  },
-  {
-    id: 3,
-    name: "Wedding Classic",
-    category: "Wedding",
-    price: 1500000,
-    rating: 4.8,
-    reviews: 78,
-    image:
-      "https://images.unsplash.com/photo-1519654793190-2e8a4806f1f2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80",
-    description:
-      "Kue pernikahan klasik bertingkat dengan hiasan fondant elegan. Tersedia dalam berbagai ukuran sesuai jumlah tamu.",
-    sizes: ["3 Tingkat", "4 Tingkat", "5 Tingkat"],
-  },
-  {
-    id: 4,
-    name: "Butter Cookies",
-    category: "Cookies",
-    price: 75000,
-    rating: 4.6,
-    reviews: 189,
-    image:
-      "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80",
-    description:
-      "Kukis butter klasik yang renyah dan lembut. Dibuat dengan butter premium Selandia Baru.",
-    sizes: ["250gr", "500gr", "1kg"],
-  },
-];
-
-const categories = [
-  { name: "Kue Ulang Tahun", count: 12 },
-  { name: "Kue Pernikahan", count: 8 },
-  { name: "Kue Kering", count: 15 },
-  { name: "Cupcakes", count: 20 },
-];
+import { useState, useEffect } from "react";
+import { getProducts } from "@/services/supabase/products-services";
 
 const Products = () => {
+  const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [sortBy, setSortBy] = useState("price-low");
   const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const data = await getCategories();
+        setCategories(data.categories || []);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const { products: fetchedProducts } = await getProducts();
+        setProducts(fetchedProducts);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   // Filter produk berdasarkan pencarian
   const filteredProducts = products.filter((product) =>

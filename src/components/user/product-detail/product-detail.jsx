@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Star, Minus, Plus, ArrowLeft } from "lucide-react";
+import { Minus, Plus, ArrowLeft } from "lucide-react";
 import useProductStore from "@/store/use-product-store";
 import { formatCurrency } from "@/utils/format-currency";
 import ProductNotFound from "./product-not-found";
@@ -12,13 +12,21 @@ const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  if (!product || product.id !== Number(id)) {
+  // Validasi produk
+  if (!product || product.id !== id) {
     return <ProductNotFound />;
   }
+
+  // Temukan varian yang dipilih
+  const selectedVariant = product.variants.find(
+    (variant) => variant.name === selectedSize,
+  );
+  const totalPrice = selectedVariant ? selectedVariant.price * quantity : 0;
 
   return (
     <div className="min-h-screen bg-light dark:bg-dark py-6 md:py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Tombol Kembali */}
         <button
           onClick={() => navigate(-1)}
           className="inline-flex items-center text-sm md:text-base text-secondary dark:text-light hover:text-secondary/70 dark:hover:text-light/70 mb-3 md:mb-4"
@@ -27,56 +35,51 @@ const ProductDetail = () => {
           Kembali
         </button>
 
+        {/* Layout Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-          {/* Image Section */}
+          {/* Gambar Produk */}
           <div className="relative">
             <img
-              src={product.image}
+              src={product.image || "https://via.placeholder.com/300"}
               alt={product.name}
               className="w-full h-[300px] md:h-[500px] object-cover rounded-lg"
             />
           </div>
 
-          {/* Product Info Section */}
+          {/* Informasi Produk */}
           <div className="space-y-6">
             <div>
               <h1 className="text-2xl md:text-3xl font-bold text-secondary dark:text-light mb-2">
                 {product.name}
               </h1>
-              <div className="flex items-center mb-4">
-                <Star className="w-4 h-4 md:w-5 md:h-5 text-secondary fill-current dark:text-light dark:fill-light" />
-                <span className="ml-1 text-sm md:text-base text-secondary dark:text-light">
-                  {product.rating}
-                </span>
-              </div>
               <p className="text-sm md:text-base text-secondary/70 dark:text-light/70">
                 {product.description}
               </p>
             </div>
 
-            {/* Size Selection */}
+            {/* Pilihan Ukuran */}
             <div>
               <h3 className="text-sm md:text-base font-semibold text-secondary dark:text-light mb-3">
                 Ukuran
               </h3>
               <div className="flex flex-wrap gap-2 md:gap-3">
-                {product.sizes?.map((size) => (
+                {product.variants.map((variant) => (
                   <button
-                    key={size}
-                    onClick={() => setSelectedSize(size)}
+                    key={variant.name}
+                    onClick={() => setSelectedSize(variant.name)}
                     className={`px-3 py-1.5 md:px-4 md:py-2 text-sm md:text-base rounded-lg border ${
-                      selectedSize === size
+                      selectedSize === variant.name
                         ? "border-secondary bg-secondary text-white dark:border-light dark:bg-light dark:text-dark"
                         : "border-secondary/10 text-secondary hover:border-secondary dark:border-light/20 dark:text-light dark:hover:border-light"
                     }`}
                   >
-                    {size}
+                    {variant.name}
                   </button>
                 ))}
               </div>
             </div>
 
-            {/* Quantity Selection */}
+            {/* Pilihan Jumlah */}
             <div>
               <h3 className="text-sm md:text-base font-semibold text-secondary dark:text-light mb-3">
                 Jumlah
@@ -100,14 +103,14 @@ const ProductDetail = () => {
               </div>
             </div>
 
-            {/* Price and Buttons */}
+            {/* Harga Total dan Tombol */}
             <div className="flex flex-col space-y-4 md:space-y-0 md:flex-row md:items-center md:justify-between">
               <div className="md:mr-4">
                 <p className="text-xs md:text-sm text-secondary/70 dark:text-light/70">
                   Harga Total
                 </p>
                 <p className="text-2xl md:text-3xl font-bold text-secondary dark:text-light">
-                  {formatCurrency(product.price * quantity)}
+                  {formatCurrency(totalPrice)}
                 </p>
               </div>
               <div className="flex flex-col space-y-2 md:space-y-0 md:flex-row md:gap-4 w-full md:w-auto">

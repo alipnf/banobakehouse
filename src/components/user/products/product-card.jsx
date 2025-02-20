@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import useProductStore from "@/store/use-product-store";
-import { Star } from "lucide-react";
 import { formatCurrency } from "@/utils/format-currency";
 
 const ProductCard = ({ product }) => {
@@ -8,6 +7,10 @@ const ProductCard = ({ product }) => {
   const setSelectedProduct = useProductStore(
     (state) => state.setSelectedProduct,
   );
+
+  // Hitung harga terendah dan tertinggi
+  const prices = product.variants.map((variant) => variant.price);
+  const minPrice = Math.min(...prices);
 
   const handleClick = () => {
     setSelectedProduct(product);
@@ -26,7 +29,6 @@ const ProductCard = ({ product }) => {
           className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
         />
       </div>
-
       <div className="p-4 md:p-6 flex flex-col flex-grow">
         <div className="flex items-center mt-1 gap-2 text-sm md:text-base text-secondary dark:text-primary mb-4">
           <div className="flex items-center gap-1 text-sm md:text-base text-secondary dark:text-primary">
@@ -34,13 +36,10 @@ const ProductCard = ({ product }) => {
               {product.name}
             </h3>
           </div>
-          <Star className="w-4 h-4 md:w-5 md:h-5 fill-current text-secondary dark:text-primary" />
-          <span>{product.rating}</span>
         </div>
-
         <div className="mt-auto flex flex-col md:flex-row md:justify-between md:items-center gap-2">
           <span className="text-base md:text-lg font-semibold text-secondary dark:text-primary">
-            {formatCurrency(product.price)}
+            {formatCurrency(minPrice)}
           </span>
           <button className="w-full md:w-auto px-4 py-2 bg-secondary dark:bg-primary text-white dark:text-dark text-sm md:text-base rounded-lg hover:bg-secondary/90 dark:hover:bg-primary/90">
             Pesan
