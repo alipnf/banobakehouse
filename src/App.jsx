@@ -4,6 +4,7 @@ import { ToastContainer } from "react-toastify";
 import ErrorPage from "./pages/error/error-page";
 import { useEffect } from "react";
 import { applyThemeFromLocalStorage } from "./utils/theme";
+import ScrollToTop from "./utils/ScrollToTop";
 
 const App = () => {
   useEffect(() => {
@@ -22,6 +23,7 @@ const App = () => {
         draggable
         pauseOnHover
       />
+      <ScrollToTop />
 
       <Routes>
         {UserRoutes()}
