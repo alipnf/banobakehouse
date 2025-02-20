@@ -168,6 +168,7 @@ const useProducts = () => {
   // Fungsi untuk membuka form edit
   const handleEditProduct = (product) => {
     setEditingProduct(product);
+    setImagePreview(product.image); // Set preview gambar
 
     // Set variants dari produk yang sedang diedit
     if (product.variants && product.variants.length > 0) {
