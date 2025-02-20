@@ -111,8 +111,6 @@ const FAQ = () => {
       {/* FAQ List */}
       <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
         <div className="overflow-y-auto">
-          {" "}
-          {/* Tambahkan max-height dan overflow-y */}
           <table className="w-full">
             {/* Header tabel */}
             <thead>
@@ -123,7 +121,7 @@ const FAQ = () => {
                 <th className="px-6 py-3 text-left text-xs font-medium text-secondary/70 uppercase tracking-wider">
                   Jawaban
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-secondary/70 uppercase tracking-wider w-[80px]">
+                <th className="px-6 py-3 text-right text-xs font-medium text-secondary/70 uppercase tracking-wider w-[80px]">
                   Aksi
                 </th>
               </tr>

@@ -146,19 +146,18 @@ const Categories = () => {
         </div>
       )}
 
-      {/* Categories Table (tetap sama seperti sebelumnya) */}
       <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
-        <div className="overflow-x-auto">
+        <div className="overflow-y-auto">
           <table className="w-full">
             <thead>
               <tr className="bg-gray-50">
-                <th className="px-10 py-3 text-left text-xs font-medium text-secondary/70 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-secondary/70 uppercase tracking-wider">
                   Kategori
                 </th>
-                <th className="px-10 py-3 text-left text-xs font-medium text-secondary/70 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-secondary/70 uppercase tracking-wider">
                   Deskripsi
                 </th>
-                <th className="px-10 py-3 text-right text-xs font-medium text-secondary/70 uppercase tracking-wider">
+                <th className="px-6 py-3 text-right text-xs font-medium text-secondary/70 uppercase tracking-wider">
                   Aksi
                 </th>
               </tr>
@@ -166,7 +165,7 @@ const Categories = () => {
             <tbody className="bg-white divide-y divide-gray-200">
               {categories.map((category) => (
                 <tr key={category.id} className="hover:bg-gray-50">
-                  <td className="px-10 py-4 whitespace-nowrap">
+                  <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <img
                         src={category.image}
@@ -178,7 +177,7 @@ const Categories = () => {
                       </span>
                     </div>
                   </td>
-                  <td className="px-10 py-4 text-sm text-secondary">
+                  <td className="px-6 py-4 text-sm text-secondary">
                     {category.description}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
