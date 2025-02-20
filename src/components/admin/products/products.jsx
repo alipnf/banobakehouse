@@ -127,6 +127,9 @@ const Products = () => {
                 <div key={index} className="flex items-center space-x-4 mb-2">
                   {/* Input Nama Varian */}
                   <input
+                    {...register(`variants.${index}.name`, {
+                      required: "Nama varian diperlukan",
+                    })}
                     type="text"
                     value={variant.name}
                     onChange={(e) =>
@@ -139,9 +142,17 @@ const Products = () => {
                     placeholder="Nama Varian (misal: Custom Size)"
                     className="w-32 px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
                   />
+                  {errors.variants?.[index]?.name && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.variants[index].name.message}
+                    </p>
+                  )}
 
                   {/* Input Harga Varian */}
                   <input
+                    {...register(`variants.${index}.price`, {
+                      required: "Harga varian diperlukan",
+                    })}
                     type="number"
                     value={variant.price}
                     onChange={(e) =>
@@ -155,14 +166,22 @@ const Products = () => {
                     className="w-32 px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
                   />
 
+                  {errors.variants?.[index]?.price && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.variants[index].price.message}
+                    </p>
+                  )}
+
                   {/* Tombol Hapus Varian */}
-                  <button
-                    type="button"
-                    onClick={() => removeVariant(index)}
-                    className="px-2 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600"
-                  >
-                    Hapus
-                  </button>
+                  {variants.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => removeVariant(index)}
+                      className="px-2 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600"
+                    >
+                      Hapus
+                    </button>
+                  )}
                 </div>
               ))}
 
@@ -174,6 +193,11 @@ const Products = () => {
               >
                 Tambah Varian
               </button>
+              {errors.variants && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.variants.message}
+                </p>
+              )}
             </div>
 
             {/* Status */}
@@ -220,7 +244,11 @@ const Products = () => {
                   Pilih Gambar
                 </label>
                 <input
-                  {...register("image", { required: !editingProduct })}
+                  {...(imagePreview
+                    ? {}
+                    : register("image", {
+                        required: "Gambar diperlukan",
+                      }))}
                   id="image-upload"
                   type="file"
                   accept="image/*"
