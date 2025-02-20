@@ -129,3 +129,21 @@ export const uploadImageAndGetUrl = async (file) => {
     throw error;
   }
 };
+
+// Fungsi untuk mendapatkan produk berdasarkan kategori
+export const getProductByCategory = async (category) => {
+  try {
+    // Query untuk mendapatkan produk berdasarkan kategori
+    const { data, error } = await supabase
+      .from("products")
+      .select("*")
+      .eq("category", category); // Filter berdasarkan kolom "category"
+
+    if (error) throw error;
+
+    return { products: data }; // Mengembalikan data produk dalam format objek
+  } catch (error) {
+    console.error("Error fetching products by category:", error);
+    throw error; // Melempar error agar dapat ditangani oleh pemanggil
+  }
+};

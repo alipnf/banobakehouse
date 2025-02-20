@@ -1,7 +1,10 @@
 import { getCategories } from "@/services/supabase/categories-service";
+import {
+  getProductByCategory,
+  getProducts,
+} from "@/services/supabase/products-services";
 import { CategorySidebar, Pagination, ProductCard, SearchAndSort } from "./";
 import { useState, useEffect } from "react";
-import { getProducts } from "@/services/supabase/products-services";
 import useProductStore from "@/store/use-product-store";
 
 const Products = () => {
@@ -9,7 +12,9 @@ const Products = () => {
   const [categories, setCategories] = useState([]);
   const [sortBy, setSortBy] = useState("price-low");
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
+  // Fetch semua kategori
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -22,18 +27,28 @@ const Products = () => {
     fetchCategories();
   }, []);
 
+  // Fetch produk berdasarkan kategori atau semua produk
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const { products: fetchedProducts } = await getProducts();
+        let fetchedProducts = [];
+        if (selectedCategory) {
+          // Jika ada kategori terpilih, ambil produk berdasarkan kategori
+          const { products: categoryProducts } =
+            await getProductByCategory(selectedCategory);
+          fetchedProducts = categoryProducts;
+        } else {
+          // Jika tidak ada kategori terpilih, ambil semua produk
+          const { products: allProducts } = await getProducts();
+          fetchedProducts = allProducts;
+        }
         setProducts(fetchedProducts);
       } catch (error) {
         console.error("Error fetching products:", error);
       }
     };
-
     fetchProducts();
-  }, [setProducts]);
+  }, [selectedCategory, setProducts]);
 
   // Filter produk berdasarkan pencarian
   const filteredProducts = products.filter((product) =>
@@ -56,7 +71,12 @@ const Products = () => {
             <h2 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Kategori:
             </h2>
-            <select className="w-full p-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-dark text-gray-700 dark:text-gray-200">
+            <select
+              className="w-full p-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-dark text-gray-700 dark:text-gray-200"
+              value={selectedCategory || ""}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+            >
+              <option value="">Semua Kategori</option>
               {categories.map((category, index) => (
                 <option key={index} value={category.name}>
                   {category.name}
@@ -64,12 +84,14 @@ const Products = () => {
               ))}
             </select>
           </div>
-
           {/* Sidebar (Desktop) */}
           <div className="hidden md:block w-64 flex-shrink-0">
-            <CategorySidebar categories={categories} />
+            <CategorySidebar
+              categories={categories}
+              selectedCategory={selectedCategory}
+              onCategorySelect={(category) => setSelectedCategory(category)} // Handler untuk memilih kategori
+            />
           </div>
-
           {/* Main Content */}
           <div className="flex-1">
             <SearchAndSort
@@ -78,7 +100,6 @@ const Products = () => {
               sortBy={sortBy}
               setSortBy={setSortBy}
             />
-
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 md:gap-3 lg:gap-6">
               {sortedProducts.length > 0 ? (
                 sortedProducts.map((product) => (
