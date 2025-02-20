@@ -1,14 +1,14 @@
 import { Route } from "react-router-dom";
-import QuestLayout from "@/layouts/quest-layout";
 import { LoginPage, RegisterPage } from "../pages/quest";
+import GuestLayout from "@/layouts/guest-layout";
 
-const QuestRoutes = () => {
+const GuestRoutes = () => {
   return (
-    <Route path="auth" element={<QuestLayout />}>
+    <Route path="auth" element={<GuestLayout />}>
       <Route path="login" element={<LoginPage />} />
       <Route path="register" element={<RegisterPage />} />
     </Route>
   );
 };
 
-export default QuestRoutes;
+export default GuestRoutes;

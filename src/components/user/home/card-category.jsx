@@ -1,6 +1,4 @@
 const CardCategory = ({ category }) => {
-  console.log(category);
-
   return (
     <div className="group relative bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
       <div className="relative w-full aspect-[4/3] overflow-hidden">

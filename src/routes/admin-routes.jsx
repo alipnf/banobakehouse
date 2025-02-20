@@ -1,9 +1,12 @@
 import { Route } from "react-router-dom";
 import ProtectedRoute from "./protected-route";
 import AdminLayout from "@/layouts/admin-layout";
-import AboutUsPage from "@/pages/admin/about-us-page";
-import FaqPage from "@/pages/admin/faq-page";
-import CategoriesPage from "@/pages/admin/categories-page";
+import {
+  AboutUsPage,
+  FaqPage,
+  CategoriesPage,
+  ProductsPage,
+} from "@/pages/admin";
 
 const AdminRoutes = () => {
   return (
@@ -19,6 +22,7 @@ const AdminRoutes = () => {
       <Route path="about-us" element={<AboutUsPage />} />
       <Route path="faq" element={<FaqPage />} />
       <Route path="categories" element={<CategoriesPage />} />
+      <Route path="products" element={<ProductsPage />} />
     </Route>
   );
 };

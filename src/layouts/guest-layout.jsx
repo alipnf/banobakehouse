@@ -1,7 +1,7 @@
 import Navbar from "@/components/common/navbar";
 import { Outlet } from "react-router-dom";
 
-const QuestLayout = () => {
+const GuestLayout = () => {
   return (
     <div className="bg-light text-secondary dark:bg-dark dark:text-secondary-dark min-h-screen">
       <Navbar />
@@ -12,4 +12,4 @@ const QuestLayout = () => {
   );
 };
 
-export default QuestLayout;
+export default GuestLayout;

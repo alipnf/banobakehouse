@@ -1,4 +1,4 @@
-import useFaq from "@/hooks/use-faq";
+import useFaq from "@/hooks/admin/use-faq";
 import { Plus, Edit2, Trash2 } from "lucide-react";
 
 const FAQ = () => {
@@ -110,8 +110,9 @@ const FAQ = () => {
 
       {/* FAQ List */}
       <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
-        <div className="overflow-x-auto">
+        <div className="overflow-y-auto">
           <table className="w-full">
+            {/* Header tabel */}
             <thead>
               <tr className="bg-gray-50">
                 <th className="px-6 py-3 text-left text-xs font-medium text-secondary/70 uppercase tracking-wider">
@@ -120,30 +121,29 @@ const FAQ = () => {
                 <th className="px-6 py-3 text-left text-xs font-medium text-secondary/70 uppercase tracking-wider">
                   Jawaban
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-secondary/70 uppercase tracking-wider w-[80px]">
+                <th className="px-6 py-3 text-right text-xs font-medium text-secondary/70 uppercase tracking-wider w-[80px]">
                   Aksi
                 </th>
               </tr>
             </thead>
+            {/* Body tabel */}
             <tbody className="bg-white divide-y divide-gray-200">
               {faqs.length > 0 ? (
                 faqs.map((faq) => (
                   <tr key={faq.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 max-w-[200px]">
-                      <div className="text-sm font-medium text-secondary truncate">
+                    <td className="px-6 py-4">
+                      <div className="text-sm font-medium text-secondary">
                         {faq.question}
                       </div>
                     </td>
-                    <td className="px-6 py-4 max-w-[300px]">
-                      <div className="text-sm text-secondary truncate">
-                        {faq.answer}
-                      </div>
+                    <td className="px-6 py-4">
+                      <div className="text-sm text-secondary">{faq.answer}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium w-[80px]">
                       <div className="flex items-center justify-end space-x-2">
                         <button
                           onClick={() => {
-                            setEditingFaq(faq); // Set FAQ yang sedang diedit
+                            setEditingFaq(faq);
                             reset({
                               question: faq.question,
                               answer: faq.answer,
