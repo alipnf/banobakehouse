@@ -1,12 +1,44 @@
-const Pagination = () => {
+const Pagination = ({ currentPage, totalItems, pageSize, onPageChange }) => {
+  const totalPages = Math.ceil(totalItems / pageSize);
+
+  const handlePageChange = (newPage) => {
+    if (newPage < 1 || newPage > totalPages) return;
+    onPageChange(newPage);
+  };
+
+  const renderPageNumbers = () => {
+    const pages = [];
+    const startPage = Math.max(1, currentPage - 2);
+    const endPage = Math.min(totalPages, currentPage + 2);
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(
+        <button
+          key={i}
+          onClick={() => handlePageChange(i)}
+          className={`min-h-[38px] min-w-[38px] flex justify-center items-center ${
+            currentPage === i
+              ? "bg-gray-200 dark:bg-neutral-600"
+              : "hover:bg-gray-100 dark:hover:bg-white/10"
+          } text-gray-800 dark:text-white py-2 px-3 text-sm rounded-lg focus:outline-none`}
+        >
+          {i}
+        </button>,
+      );
+    }
+    return pages;
+  };
+
+  if (totalPages <= 1) return null;
+
   return (
     <div className="mt-14 flex justify-center">
       <nav className="flex items-center gap-x-1" aria-label="Pagination">
         <button
-          type="button"
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
           className="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-1.5 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10"
           aria-label="Previous"
-          disabled
         >
           <svg
             className="shrink-0 size-3.5"
@@ -24,29 +56,12 @@ const Pagination = () => {
           </svg>
           <span>Previous</span>
         </button>
-        <div className="flex items-center gap-x-1">
-          <button
-            type="button"
-            className="min-h-[38px] min-w-[38px] flex justify-center items-center bg-gray-200 text-gray-800 py-2 px-3 text-sm rounded-lg focus:outline-none focus:bg-gray-300 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-600 dark:text-white dark:focus:bg-neutral-500"
-            aria-current="page"
-          >
-            1
-          </button>
-          <button
-            type="button"
-            className="min-h-[38px] min-w-[38px] flex justify-center items-center text-gray-800 hover:bg-gray-100 py-2 px-3 text-sm rounded-lg focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10"
-          >
-            2
-          </button>
-          <button
-            type="button"
-            className="min-h-[38px] min-w-[38px] flex justify-center items-center text-gray-800 hover:bg-gray-100 py-2 px-3 text-sm rounded-lg focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10"
-          >
-            3
-          </button>
-        </div>
+
+        <div className="flex items-center gap-x-1">{renderPageNumbers()}</div>
+
         <button
-          type="button"
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
           className="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-1.5 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10"
           aria-label="Next"
         >

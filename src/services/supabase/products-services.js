@@ -1,11 +1,23 @@
 import { supabase } from "./supabase-config";
 
 // Fungsi untuk mendapatkan semua produk
-export const getProducts = async () => {
+// products-services.js
+export const getProducts = async (page = 1, pageSize = 10) => {
   try {
-    const { data, error } = await supabase.from("products").select("*");
+    const start = (page - 1) * pageSize;
+    const end = page * pageSize - 1;
+
+    let query = supabase.from("products").select("*", { count: "exact" });
+
+    const { data, error, count } = await query.range(start, end);
+
     if (error) throw error;
-    return { products: data };
+    return {
+      products: data,
+      total: count,
+      page,
+      pageSize,
+    };
   } catch (error) {
     console.error("Error fetching products:", error);
     throw error;
@@ -130,38 +142,60 @@ export const uploadImageAndGetUrl = async (file) => {
   }
 };
 
-// Fungsi untuk mendapatkan produk berdasarkan kategori
-export const getProductByCategory = async (category) => {
+// Fungsi untuk mendapatkan produk berdasarkan kategori dengan pagination
+export const getProductByCategory = async (
+  category,
+  page = 1,
+  pageSize = 10,
+) => {
   try {
-    // Query untuk mendapatkan produk berdasarkan kategori
-    const { data, error } = await supabase
+    const start = (page - 1) * pageSize; // Hitung indeks awal
+    const end = page * pageSize - 1; // Hitung indeks akhir
+
+    const { data, error, count } = await supabase
       .from("products")
-      .select("*")
-      .eq("category", category); // Filter berdasarkan kolom "category"
+      .select("*", { count: "exact" }) // Menghitung total jumlah data
+      .eq("category", category) // Filter berdasarkan kolom "category"
+      .order("id", { ascending: true }) // Opsional: Urutkan berdasarkan kolom tertentu
+      .range(start, end);
 
     if (error) throw error;
 
-    return { products: data }; // Mengembalikan data produk dalam format objek
+    return {
+      products: data,
+      total: count, // Total jumlah produk di database
+      page,
+      pageSize,
+    };
   } catch (error) {
     console.error("Error fetching products by category:", error);
-    throw error; // Melempar error agar dapat ditangani oleh pemanggil
+    throw error;
   }
 };
 
-// Fungsi untuk mendapatkan produk berdasarkan nama
-export const getProductByName = async (name) => {
+// Fungsi untuk mendapatkan produk berdasarkan nama dengan pagination
+export const getProductByName = async (name, page = 1, pageSize = 10) => {
   try {
-    // Query untuk mendapatkan produk berdasarkan nama
-    const { data, error } = await supabase
+    const start = (page - 1) * pageSize; // Hitung indeks awal
+    const end = page * pageSize - 1; // Hitung indeks akhir
+
+    const { data, error, count } = await supabase
       .from("products")
-      .select("*")
-      .ilike("name", `%${name}%`); // Filter berdasarkan kolom "name" dengan pencarian partial
+      .select("*", { count: "exact" }) // Menghitung total jumlah data
+      .ilike("name", `%${name}%`) // Filter berdasarkan kolom "name" dengan pencarian partial
+      .order("id", { ascending: true }) // Opsional: Urutkan berdasarkan kolom tertentu
+      .range(start, end);
 
     if (error) throw error;
 
-    return { products: data }; // Mengembalikan data produk dalam format objek
+    return {
+      products: data,
+      total: count, // Total jumlah produk di database
+      page,
+      pageSize,
+    };
   } catch (error) {
     console.error("Error fetching products by name:", error);
-    throw error; // Melempar error agar dapat ditangani oleh pemanggil
+    throw error;
   }
 };

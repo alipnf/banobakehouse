@@ -14,6 +14,9 @@ const Products = () => {
   const [sortBy, setSortBy] = useState("price-low");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalProducts, setTotalProducts] = useState(0);
 
   // Fetch semua kategori
   useEffect(() => {
@@ -28,28 +31,57 @@ const Products = () => {
     fetchCategories();
   }, []);
 
-  // Fetch produk berdasarkan kategori atau semua produk
+  // Efek untuk mengambil data produk
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        let fetchedProducts = [];
-        if (selectedCategory) {
-          // Jika ada kategori terpilih, ambil produk berdasarkan kategori
-          const { products: categoryProducts } =
-            await getProductByCategory(selectedCategory);
-          fetchedProducts = categoryProducts;
+        let result;
+        if (searchQuery) {
+          result = await getProductByName(
+            searchQuery,
+            currentPage,
+            pageSize,
+            sortBy,
+          );
+        } else if (selectedCategory) {
+          result = await getProductByCategory(
+            selectedCategory,
+            currentPage,
+            pageSize,
+            sortBy,
+          );
         } else {
-          // Jika tidak ada kategori terpilih, ambil semua produk
-          const { products: allProducts } = await getProducts();
-          fetchedProducts = allProducts;
+          result = await getProducts(currentPage, pageSize, sortBy);
+          console.log(result);
         }
-        setProducts(fetchedProducts);
+
+        setProducts(result.products);
+        setTotalProducts(result.total);
       } catch (error) {
         console.error("Error fetching products:", error);
       }
     };
+
     fetchProducts();
-  }, [selectedCategory, setProducts]);
+  }, [
+    currentPage,
+    pageSize,
+    sortBy,
+    searchQuery,
+    selectedCategory,
+    setProducts,
+  ]);
+
+  // Reset ke halaman pertama saat ada perubahan filter/pencarian
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, selectedCategory, sortBy]);
+
+  // Handler untuk perubahan ukuran halaman
+  const handlePageSizeChange = (e) => {
+    setPageSize(Number(e.target.value));
+    setCurrentPage(1);
+  };
 
   useEffect(() => {
     const fetchSearchedProducts = async () => {
@@ -82,41 +114,26 @@ const Products = () => {
   return (
     <div className="min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex flex-col md:flex-row gap-8">
-          {/* Mobile Dropdown */}
-          <div className="md:hidden">
-            <h2 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Kategori:
-            </h2>
-            <select
-              className="w-full p-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-dark text-gray-700 dark:text-gray-200"
-              value={selectedCategory || ""}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-            >
-              <option value="">Semua Kategori</option>
-              {categories.map((category, index) => (
-                <option key={index} value={category.name}>
-                  {category.name}
-                </option>
-              ))}
-            </select>
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-[16rem_1fr] gap-8">
           {/* Sidebar (Desktop) */}
-          <div className="hidden md:block w-64 flex-shrink-0">
+          <div className="hidden md:block">
             <CategorySidebar
               categories={categories}
               selectedCategory={selectedCategory}
-              onCategorySelect={(category) => setSelectedCategory(category)} // Handler untuk memilih kategori
+              onCategorySelect={setSelectedCategory}
             />
           </div>
+
           {/* Main Content */}
-          <div className="flex-1">
+          <div className="flex flex-col">
             <SearchAndSort
               searchQuery={searchQuery}
               setSearchQuery={setSearchQuery}
               sortBy={sortBy}
               setSortBy={setSortBy}
             />
+
+            {/* Produk */}
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 md:gap-3 lg:gap-6">
               {sortedProducts.length > 0 ? (
                 sortedProducts.map((product) => (
@@ -128,9 +145,31 @@ const Products = () => {
                 </p>
               )}
             </div>
+
+            {/* Pagination */}
+            <div className="mt-6 flex justify-center">
+              <Pagination
+                currentPage={currentPage}
+                totalItems={totalProducts}
+                pageSize={pageSize}
+                onPageChange={setCurrentPage}
+              />
+            </div>
+
+            {/* Dropdown jumlah per halaman */}
+            <div className="mt-4 flex items-center gap-2 justify-end">
+              <select
+                value={pageSize}
+                onChange={handlePageSizeChange}
+                className="p-2 rounded border dark:bg-dark dark:text-light"
+              >
+                <option value={10}>10 per halaman</option>
+                <option value={20}>20 per halaman</option>
+                <option value={50}>50 per halaman</option>
+              </select>
+            </div>
           </div>
         </div>
-        <Pagination />
       </div>
     </div>
   );
