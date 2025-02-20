@@ -98,9 +98,11 @@ const Categories = () => {
                   Pilih Gambar
                 </label>
                 <input
-                  {...register("image", {
-                    required: "Gambar diperlukan",
-                  })}
+                  {...(imagePreview
+                    ? {}
+                    : register("image", {
+                        required: "Gambar diperlukan",
+                      }))}
                   id="image-upload"
                   type="file"
                   accept="image/*"
