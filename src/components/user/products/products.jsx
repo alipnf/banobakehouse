@@ -46,7 +46,6 @@ const Products = () => {
           );
         } else {
           result = await getProducts(currentPage, pageSize);
-          console.log(result);
         }
 
         setProducts(result.products);
