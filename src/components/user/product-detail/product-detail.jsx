@@ -42,6 +42,7 @@ const ProductDetail = () => {
           <ArrowLeft className="w-2 h-2 md:w-5 md:h-5 mr-2" />
           Kembali
         </button>
+
         {/* Layout Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
           {/* Gambar Produk */}
@@ -52,16 +53,18 @@ const ProductDetail = () => {
               className="w-full h-[300px] md:h-[500px] object-cover rounded-lg"
             />
           </div>
+
           {/* Informasi Produk */}
           <div className="space-y-6">
             <div>
-              <h1 className="text-2xl md:text-3xl font-bold text-secondary dark:text-light mb-2">
+              <h1 className="text-2xl md:text-3xl font-bold text-secondary dark:text-light mb-10">
                 {product.name}
               </h1>
-              <p className="text-sm md:text-base text-secondary/70 dark:text-light/70">
+              <p className="text-sm md:text-base text-secondary/70 dark:text-light/70 mb-4">
                 {product.description}
               </p>
             </div>
+
             {/* Pilihan Ukuran */}
             <div>
               <h3 className="text-sm md:text-base font-semibold text-secondary dark:text-light mb-3">
@@ -83,6 +86,7 @@ const ProductDetail = () => {
                 ))}
               </div>
             </div>
+
             {/* Pilihan Jumlah */}
             <div>
               <h3 className="text-sm md:text-base font-semibold text-secondary dark:text-light mb-3">
@@ -106,6 +110,7 @@ const ProductDetail = () => {
                 </button>
               </div>
             </div>
+
             {/* Harga Total dan Tombol */}
             <div className="flex flex-col space-y-4 md:space-y-0 md:flex-row md:items-center md:justify-between">
               <div className="md:mr-4">

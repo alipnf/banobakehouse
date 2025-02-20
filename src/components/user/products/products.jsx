@@ -58,7 +58,7 @@ const Products = () => {
             <select className="w-full p-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-dark text-gray-700 dark:text-gray-200">
               {categories.map((category, index) => (
                 <option key={index} value={category.name}>
-                  {category.name} ({category.count})
+                  {category.name}
                 </option>
               ))}
             </select>
