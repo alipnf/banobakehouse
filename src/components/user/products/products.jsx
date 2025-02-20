@@ -2,9 +2,10 @@ import { getCategories } from "@/services/supabase/categories-service";
 import { CategorySidebar, Pagination, ProductCard, SearchAndSort } from "./";
 import { useState, useEffect } from "react";
 import { getProducts } from "@/services/supabase/products-services";
+import useProductStore from "@/store/use-product-store";
 
 const Products = () => {
-  const [products, setProducts] = useState([]);
+  const { products, setProducts } = useProductStore();
   const [categories, setCategories] = useState([]);
   const [sortBy, setSortBy] = useState("price-low");
   const [searchQuery, setSearchQuery] = useState("");
@@ -32,7 +33,7 @@ const Products = () => {
     };
 
     fetchProducts();
-  }, []);
+  }, [setProducts]);
 
   // Filter produk berdasarkan pencarian
   const filteredProducts = products.filter((product) =>

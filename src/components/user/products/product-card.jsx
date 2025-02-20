@@ -4,9 +4,7 @@ import { formatCurrency } from "@/utils/format-currency";
 
 const ProductCard = ({ product }) => {
   const navigate = useNavigate();
-  const setSelectedProduct = useProductStore(
-    (state) => state.setSelectedProduct,
-  );
+  const { setSelectedProduct } = useProductStore();
 
   const handleClick = () => {
     setSelectedProduct(product);
