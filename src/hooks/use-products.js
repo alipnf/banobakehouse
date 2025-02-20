@@ -113,6 +113,7 @@ const useProducts = () => {
 
       const newProduct = {
         name: data.name,
+        description: data.description,
         category: data.category,
         variants: variants.map((variant) => ({
           name: variant.name,

@@ -71,6 +71,27 @@ const Products = () => {
               )}
             </div>
 
+            {/* Deskripsi Produk */}
+            <div>
+              <label className="block text-sm font-medium text-secondary mb-1">
+                Deskripsi Produk
+              </label>
+              <textarea
+                {...register("description", {
+                  required: "Deskripsi produk diperlukan",
+                })}
+                defaultValue={editingProduct?.description}
+                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
+                placeholder="Masukkan deskripsi produk"
+                rows="4"
+              ></textarea>
+              {errors.description && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.description.message}
+                </p>
+              )}
+            </div>
+
             {/* Kategori */}
             <div>
               <label className="block text-sm font-medium text-secondary mb-1">
@@ -305,6 +326,9 @@ const Products = () => {
                   Produk
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-secondary/70 uppercase tracking-wider">
+                  Deskripsi
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-secondary/70 uppercase tracking-wider">
                   Kategori
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-secondary/70 uppercase tracking-wider">
@@ -332,6 +356,9 @@ const Products = () => {
                         {product.name}
                       </span>
                     </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-secondary">
+                    {product.description}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-secondary">
                     {product.category}
