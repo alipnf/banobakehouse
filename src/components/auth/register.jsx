@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import useAuth from "@/hooks/use-auth";
+import useAuth from "@/hooks/user/use-auth";
 // import GoogleIcon from "./google-icon";
 
 const Register = () => {

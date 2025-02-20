@@ -1,6 +1,6 @@
 import { Controller } from "react-hook-form";
 import { Save, Phone, Mail, MapPin, Plus, Trash2, Car } from "lucide-react";
-import useWebInfo from "@/hooks/use-web-info";
+import useWebInfo from "@/hooks/admin/use-web-info";
 
 const WebInfo = () => {
   const [

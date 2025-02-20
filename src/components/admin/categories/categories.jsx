@@ -1,4 +1,4 @@
-import useCategories from "@/hooks/use-categories";
+import useCategories from "@/hooks/admin/use-categories";
 import { Plus, Edit2, Trash2, Image as ImageIcon } from "lucide-react";
 
 const Categories = () => {

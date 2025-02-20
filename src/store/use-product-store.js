@@ -6,8 +6,10 @@ const useProductStore = create(
     (set) => ({
       products: [],
       selectedProduct: null,
+      categories: [],
       setSelectedProduct: (product) => set({ selectedProduct: product }),
       setProducts: (products) => set({ products }),
+      setCategories: (categories) => set({ categories }),
     }),
     {
       name: "product-storage",

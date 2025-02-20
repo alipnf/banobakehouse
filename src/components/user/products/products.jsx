@@ -9,14 +9,14 @@ import { useState, useEffect } from "react";
 import useProductStore from "@/store/use-product-store";
 
 const Products = () => {
-  const { products, setProducts } = useProductStore();
-  const [categories, setCategories] = useState([]);
-  const [sortBy, setSortBy] = useState("price-low");
+  const { products, setProducts, categories, setCategories } =
+    useProductStore();
+  // const [sortBy, setSortBy] = useState("price-low");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
   const [totalProducts, setTotalProducts] = useState(0);
+  const pageSize = 9;
 
   // Fetch semua kategori
   useEffect(() => {
@@ -29,7 +29,7 @@ const Products = () => {
       }
     };
     fetchCategories();
-  }, []);
+  }, [setCategories]);
 
   // Efek untuk mengambil data produk
   useEffect(() => {
@@ -37,21 +37,15 @@ const Products = () => {
       try {
         let result;
         if (searchQuery) {
-          result = await getProductByName(
-            searchQuery,
-            currentPage,
-            pageSize,
-            sortBy,
-          );
+          result = await getProductByName(searchQuery, currentPage, pageSize);
         } else if (selectedCategory) {
           result = await getProductByCategory(
             selectedCategory,
             currentPage,
             pageSize,
-            sortBy,
           );
         } else {
-          result = await getProducts(currentPage, pageSize, sortBy);
+          result = await getProducts(currentPage, pageSize);
           console.log(result);
         }
 
@@ -63,25 +57,12 @@ const Products = () => {
     };
 
     fetchProducts();
-  }, [
-    currentPage,
-    pageSize,
-    sortBy,
-    searchQuery,
-    selectedCategory,
-    setProducts,
-  ]);
+  }, [currentPage, pageSize, searchQuery, selectedCategory, setProducts]);
 
   // Reset ke halaman pertama saat ada perubahan filter/pencarian
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchQuery, selectedCategory, sortBy]);
-
-  // Handler untuk perubahan ukuran halaman
-  const handlePageSizeChange = (e) => {
-    setPageSize(Number(e.target.value));
-    setCurrentPage(1);
-  };
+  }, [searchQuery, selectedCategory]);
 
   useEffect(() => {
     const fetchSearchedProducts = async () => {
@@ -100,16 +81,16 @@ const Products = () => {
   }, [searchQuery, setProducts]);
 
   // Filter produk berdasarkan pencarian
-  const filteredProducts = products.filter((product) =>
-    product.name.toLowerCase().includes(searchQuery.toLowerCase()),
-  );
+  // const filteredProducts = products.filter((product) =>
+  //   product.name.toLowerCase().includes(searchQuery.toLowerCase()),
+  // );
 
   // Sorting produk berdasarkan harga
-  const sortedProducts = [...filteredProducts].sort((a, b) => {
-    if (sortBy === "price-low") return a.price - b.price;
-    if (sortBy === "price-high") return b.price - a.price;
-    return 0;
-  });
+  // const sortedProducts = [...filteredProducts].sort((a, b) => {
+  //   if (sortBy === "price-low") return a.price - b.price;
+  //   if (sortBy === "price-high") return b.price - a.price;
+  //   return 0;
+  // });
 
   return (
     <div className="min-h-screen">
@@ -129,14 +110,14 @@ const Products = () => {
             <SearchAndSort
               searchQuery={searchQuery}
               setSearchQuery={setSearchQuery}
-              sortBy={sortBy}
-              setSortBy={setSortBy}
+              // sortBy={sortBy}
+              // setSortBy={setSortBy}
             />
 
             {/* Produk */}
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 md:gap-3 lg:gap-6">
-              {sortedProducts.length > 0 ? (
-                sortedProducts.map((product) => (
+              {products.length > 0 ? (
+                products.map((product) => (
                   <ProductCard key={product.id} product={product} />
                 ))
               ) : (
@@ -154,19 +135,6 @@ const Products = () => {
                 pageSize={pageSize}
                 onPageChange={setCurrentPage}
               />
-            </div>
-
-            {/* Dropdown jumlah per halaman */}
-            <div className="mt-4 flex items-center gap-2 justify-end">
-              <select
-                value={pageSize}
-                onChange={handlePageSizeChange}
-                className="p-2 rounded border dark:bg-dark dark:text-light"
-              >
-                <option value={10}>10 per halaman</option>
-                <option value={20}>20 per halaman</option>
-                <option value={50}>50 per halaman</option>
-              </select>
             </div>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import useFaq from "@/hooks/use-faq";
+import useFaq from "@/hooks/admin/use-faq";
 import { Plus, Edit2, Trash2 } from "lucide-react";
 
 const FAQ = () => {

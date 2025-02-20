@@ -1,5 +1,5 @@
 import { Plus, Edit2, Trash2, ImageIcon } from "lucide-react";
-import useProducts from "@/hooks/use-products";
+import useProducts from "@/hooks/admin/use-products";
 import { formatCurrency } from "@/utils/format-currency";
 
 const Products = () => {
