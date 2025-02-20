@@ -78,17 +78,6 @@ const useProducts = () => {
     fetchCategories();
   }, []);
 
-  // Format harga ke format mata uang IDR
-  const formatPrice = (price) => {
-    if (!price) return "Rp0";
-    return new Intl.NumberFormat("id-ID", {
-      style: "currency",
-      currency: "IDR",
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(price);
-  };
-
   // Handle upload gambar
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -225,7 +214,6 @@ const useProducts = () => {
     errors,
     onSubmit,
     handleImageUpload,
-    formatPrice,
     handleDelete,
     addVariant,
     removeVariant,

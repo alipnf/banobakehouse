@@ -1,5 +1,6 @@
 import { Plus, Edit2, Trash2, ImageIcon } from "lucide-react";
 import useProducts from "@/hooks/use-products";
+import { formatCurrency } from "@/utils/format-currency";
 
 const Products = () => {
   const {
@@ -18,7 +19,6 @@ const Products = () => {
     errors,
     onSubmit,
     handleImageUpload,
-    formatPrice,
     handleDelete,
     loading,
     setImagePreview,
@@ -311,7 +311,7 @@ const Products = () => {
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-secondary">
                     {product.variants.map((variant, index) => (
                       <div key={index}>
-                        {variant.name}: {formatPrice(variant.price)}
+                        {variant.name}: {formatCurrency(variant.price)}
                       </div>
                     ))}
                   </td>
