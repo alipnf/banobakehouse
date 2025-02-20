@@ -8,10 +8,6 @@ const ProductCard = ({ product }) => {
     (state) => state.setSelectedProduct,
   );
 
-  // Hitung harga terendah dan tertinggi
-  const prices = product.variants.map((variant) => variant.price);
-  const minPrice = Math.min(...prices);
-
   const handleClick = () => {
     setSelectedProduct(product);
     navigate(`/product/${product.id}`);
@@ -39,7 +35,7 @@ const ProductCard = ({ product }) => {
         </div>
         <div className="mt-auto flex flex-col md:flex-row md:justify-between md:items-center gap-2">
           <span className="text-base md:text-lg font-semibold text-secondary dark:text-primary">
-            {formatCurrency(minPrice)}
+            {formatCurrency(product.variants[0].price)}
           </span>
           <button className="w-full md:w-auto px-4 py-2 bg-secondary dark:bg-primary text-white dark:text-dark text-sm md:text-base rounded-lg hover:bg-secondary/90 dark:hover:bg-primary/90">
             Pesan
