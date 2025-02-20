@@ -2,6 +2,7 @@ import { getCategories } from "@/services/supabase/categories-service";
 import {
   getProductByCategory,
   getProducts,
+  getProductByName,
 } from "@/services/supabase/products-services";
 import { CategorySidebar, Pagination, ProductCard, SearchAndSort } from "./";
 import { useState, useEffect } from "react";
@@ -49,6 +50,22 @@ const Products = () => {
     };
     fetchProducts();
   }, [selectedCategory, setProducts]);
+
+  useEffect(() => {
+    const fetchSearchedProducts = async () => {
+      try {
+        const { products: searchedProducts } =
+          await getProductByName(searchQuery);
+        setProducts(searchedProducts);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    if (searchQuery) {
+      fetchSearchedProducts();
+    }
+  }, [searchQuery, setProducts]);
 
   // Filter produk berdasarkan pencarian
   const filteredProducts = products.filter((product) =>

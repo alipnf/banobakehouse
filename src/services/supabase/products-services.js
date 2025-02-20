@@ -147,3 +147,21 @@ export const getProductByCategory = async (category) => {
     throw error; // Melempar error agar dapat ditangani oleh pemanggil
   }
 };
+
+// Fungsi untuk mendapatkan produk berdasarkan nama
+export const getProductByName = async (name) => {
+  try {
+    // Query untuk mendapatkan produk berdasarkan nama
+    const { data, error } = await supabase
+      .from("products")
+      .select("*")
+      .ilike("name", `%${name}%`); // Filter berdasarkan kolom "name" dengan pencarian partial
+
+    if (error) throw error;
+
+    return { products: data }; // Mengembalikan data produk dalam format objek
+  } catch (error) {
+    console.error("Error fetching products by name:", error);
+    throw error; // Melempar error agar dapat ditangani oleh pemanggil
+  }
+};
