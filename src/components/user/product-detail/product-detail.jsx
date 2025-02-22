@@ -1,30 +1,20 @@
-import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
 import { Minus, Plus, ArrowLeft } from "lucide-react";
-import useProductStore from "@/store/use-product-store";
 import { formatCurrency } from "@/utils/format-currency";
 import ProductNotFound from "./product-not-found";
+import useProductDetail from "@/hooks/user/use-product-detail";
 
 const ProductDetail = () => {
-  const [quantity, setQuantity] = useState(1);
-  const [selectedSize, setSelectedSize] = useState("");
-  const product = useProductStore((state) => state.selectedProduct);
-  const { id } = useParams();
-  const navigate = useNavigate();
-
-  // Inisialisasi ukuran pertama sebagai default
-  useEffect(() => {
-    if (product.variants.length > 0) {
-      setSelectedSize(product.variants[0].name);
-    }
-  }, [product]);
-
-  // Temukan varian yang dipilih
-  const selectedVariant = product.variants.find(
-    (variant) => variant.name === selectedSize,
-  );
-
-  const totalPrice = selectedVariant ? selectedVariant.price * quantity : 0;
+  const {
+    quantity,
+    setQuantity,
+    selectedSize,
+    setSelectedSize,
+    product,
+    id,
+    navigate,
+    totalPrice,
+    openWhatsApp,
+  } = useProductDetail();
 
   // Validasi produk
   if (!product || product.id !== id) {
@@ -65,10 +55,10 @@ const ProductDetail = () => {
               </p>
             </div>
 
-            {/* Pilihan Ukuran */}
+            {/* Pilihan Varian */}
             <div>
               <h3 className="text-sm md:text-base font-semibold text-secondary dark:text-light mb-3">
-                Ukuran
+                Varian
               </h3>
               <div className="flex flex-wrap gap-2 md:gap-3">
                 {product.variants.map((variant) => (
@@ -128,6 +118,7 @@ const ProductDetail = () => {
                 <button
                   className="px-4 py-2.5 md:px-6 md:py-3 text-sm md:text-base bg-secondary text-white rounded-lg hover:bg-secondary/90 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-light dark:text-dark dark:hover:bg-light/90"
                   disabled={!selectedSize}
+                  onClick={openWhatsApp}
                 >
                   Pesan
                 </button>
