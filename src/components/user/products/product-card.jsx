@@ -25,10 +25,10 @@ const ProductCard = ({ product, showRemoveButton = false }) => {
       // Perbarui state wishlist secara lokal
       const updatedWishlist = wishlist.filter((item) => item.id !== product.id);
       setWishlist(updatedWishlist);
-      toast("Produk berhasil dihapus dari wishlist!");
+      toast.success("Produk berhasil dihapus dari wishlist!");
     } catch (error) {
       console.error("Error removing from wishlist:", error);
-      toast("Gagal menghapus produk dari wishlist.");
+      toast.error("Gagal menghapus produk dari wishlist.");
     }
   };
 

@@ -1,5 +1,6 @@
 import useProducts from "@/hooks/user/use-products";
-import { CategorySidebar, Pagination, ProductCard, SearchAndSort } from "./";
+import { CategorySidebar, ProductCard, SearchAndSort } from "./";
+import Pagination from "@/components/common/pagination";
 
 const Products = () => {
   const {
