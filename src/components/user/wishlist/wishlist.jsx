@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { ProductCard } from "@/components/user/products";
 import { getWishlist } from "@/services/supabase/wishlist-service";
 import useAuthStore from "@/store/use-auth-store";
+import useWishlistStore from "@/store/use-wishlist-store";
 
 const Wishlist = () => {
-  const [products, setProducts] = useState([]);
+  const { wishlist, setWishlist } = useWishlistStore();
   const { user } = useAuthStore();
   const userId = user?.id;
 
@@ -12,14 +13,14 @@ const Wishlist = () => {
     const fetchWishlist = async () => {
       try {
         const wishlistProducts = await getWishlist(userId);
-        setProducts(wishlistProducts);
+        setWishlist(wishlistProducts);
       } catch (error) {
         console.error("Error fetching wishlist:", error);
       }
     };
 
     fetchWishlist();
-  }, [userId]);
+  }, [setWishlist, userId]);
 
   return (
     <div className="min-h-screen bg-light dark:bg-dark py-6 md:py-8">
@@ -27,9 +28,9 @@ const Wishlist = () => {
         <h2 className="text-xl sm:text-2xl font-semibold text-center text-secondary dark:text-primary mb-4">
           Kue yang Disimpan
         </h2>
-        {products.length > 0 ? (
+        {wishlist.length > 0 ? (
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 md:gap-3 lg:gap-6">
-            {products.map((product) => (
+            {wishlist.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
