@@ -1,8 +1,12 @@
 import { supabase } from "./supabase-config";
 
 // Fungsi untuk mendapatkan semua produk dalam wishlist pengguna
-export const getWishlist = async (userId) => {
+export const getWishlist = async (userId, page = 1, pageSize = 10) => {
   try {
+    // Hitung offset berdasarkan halaman dan ukuran halaman
+    const start = (page - 1) * pageSize;
+    const end = page * pageSize - 1;
+
     // Ambil product_id dari wishlist berdasarkan user_id
     const { data: wishlistData, error: wishlistError } = await supabase
       .from("wishlist")
@@ -12,20 +16,37 @@ export const getWishlist = async (userId) => {
     if (wishlistError) throw wishlistError;
 
     // Jika tidak ada produk di wishlist, kembalikan array kosong
-    if (!wishlistData || wishlistData.length === 0) return [];
+    if (!wishlistData || wishlistData.length === 0) {
+      return {
+        products: [],
+        total: 0,
+        page,
+        pageSize,
+      };
+    }
 
     // Dapatkan product_id dari wishlist
     const productIds = wishlistData.map((item) => item.product_id);
 
     // Ambil detail produk dari tabel products berdasarkan product_ids
-    const { data: products, error: productError } = await supabase
+    const {
+      data: products,
+      error: productError,
+      count,
+    } = await supabase
       .from("products")
-      .select("*")
-      .in("id", productIds);
+      .select("*", { count: "exact" }) // Menggunakan count untuk mendapatkan total produk
+      .in("id", productIds)
+      .range(start, end); // Terapkan pagination
 
     if (productError) throw productError;
 
-    return products;
+    return {
+      products,
+      total: count, // Total produk di wishlist
+      page,
+      pageSize,
+    };
   } catch (error) {
     console.error("Error fetching wishlist:", error);
     throw error;
