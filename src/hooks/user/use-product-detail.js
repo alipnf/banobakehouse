@@ -4,6 +4,7 @@ import useProductStore from "@/store/use-product-store";
 import useWebInfoStore from "@/store/use-web-info-store";
 import { toast } from "react-toastify";
 import useAuthStore from "@/store/use-auth-store";
+import { addToWishlist } from "@/services/supabase/wishlist-service";
 
 const useProductDetail = () => {
   const { webInfo } = useWebInfoStore();
@@ -48,6 +49,19 @@ const useProductDetail = () => {
     }
   };
 
+  const addWishlist = async () => {
+    if (user) {
+      // Tambahkan produk ke wishlist
+      await addToWishlist(user.id, product.id);
+      toast.success("Produk berhasil ditambahkan ke wishlist.", {
+        position: "top-right",
+      });
+    } else {
+      // Redirect ke halaman login jika user belum login
+      navigate("/login");
+    }
+  };
+
   return {
     quantity,
     setQuantity,
@@ -59,6 +73,7 @@ const useProductDetail = () => {
     selectedVarian,
     totalPrice,
     openWhatsApp,
+    addWishlist,
   };
 };
 
