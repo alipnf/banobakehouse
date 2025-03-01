@@ -32,7 +32,7 @@ const Products = () => {
   } = useProducts();
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 mb-5 md:mb-10">
       {/* Header */}
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-secondary">Produk</h1>
@@ -345,7 +345,7 @@ const Products = () => {
             <tbody className="bg-white divide-y divide-gray-200">
               {products.map((product) => (
                 <tr key={product.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-6 py-4">
                     <div className="flex items-center">
                       <img
                         src={product.image}
@@ -357,7 +357,7 @@ const Products = () => {
                       </span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-secondary">
+                  <td className="px-6 py-4 text-sm text-secondary">
                     {product.description}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-secondary">
