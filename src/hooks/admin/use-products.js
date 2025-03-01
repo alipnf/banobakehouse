@@ -81,7 +81,17 @@ const useProducts = () => {
   // Handle upload gambar
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
-    if (file && file.type.startsWith("image/")) {
+    if (file) {
+      if (!file.type.startsWith("image/")) {
+        alert("Hanya file gambar yang diperbolehkan.");
+        return;
+      }
+
+      if (file.size > 5 * 1024 * 1024) {
+        alert("Ukuran file tidak boleh lebih dari 5MB.");
+        return;
+      }
+
       setImageFile(file);
       setImagePreview(URL.createObjectURL(file));
     } else {
