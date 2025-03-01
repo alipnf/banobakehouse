@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import ToggleTheme from "./toggle-theme";
 import useAuthStore from "@/store/use-auth-store";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button, Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 
 const NavItem = ({ to, children }) => (
@@ -22,6 +22,12 @@ const NavItem = ({ to, children }) => (
 const Navbar = () => {
   const { user, signOut } = useAuthStore();
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (window.HSStaticMethods) {
+      window.HSStaticMethods.autoInit();
+    }
+  }, []);
 
   return (
     <header className="sticky top-0 inset-x-0 flex flex-wrap md:justify-start md:flex-nowrap z-50 w-full text-sm">
