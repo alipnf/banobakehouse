@@ -57,8 +57,8 @@ const useCategories = () => {
         return;
       }
 
-      if (file.size > 2 * 1024 * 1024) {
-        alert("Ukuran file tidak boleh lebih dari 2MB.");
+      if (file.size > 5 * 1024 * 1024) {
+        alert("Ukuran file tidak boleh lebih dari 5MB.");
         return;
       }
 
