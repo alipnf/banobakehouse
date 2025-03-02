@@ -8,7 +8,6 @@ import {
   MessageCircle,
   LogOut,
 } from "lucide-react";
-import ToggleTheme from "./toggle-theme";
 import useAuthStore from "@/store/use-auth-store";
 import { Button, Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 
@@ -88,7 +87,6 @@ const Sidebar = ({ children }) => {
             >
               Banobakehouse
             </NavLink>
-            <ToggleTheme />
           </div>
           {/* Sidebar Links */}
           <nav className="p-3">
