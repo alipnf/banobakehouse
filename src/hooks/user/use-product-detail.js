@@ -58,7 +58,8 @@ const useProductDetail = () => {
       });
     } else {
       // Redirect ke halaman login jika user belum login
-      navigate("/login");
+      toast.error("Silahkan login terlebih dahulu.");
+      navigate("/auth/login");
     }
   };
 
