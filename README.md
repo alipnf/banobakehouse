@@ -1,8 +1,20 @@
-# React + Vite
+# **Banobakehouse**
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## **Deskripsi**
 
-Currently, two official plugins are available:
+Banobakehouse Company Profile adalah sebuah website yang dirancang untuk memberikan informasi tentang Banobakehouse, termasuk produk, layanan, dan kontak yang tersedia. Website ini dibuat menggunakan teknologi modern dengan fokus pada desain responsif dan pengalaman pengguna yang optimal.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## **Fitur Utama**
+
+- **Halaman Beranda**: Menampilkan informasi tentang Banobakehouse dan FAQ.
+- **Manajemen Produk**: Admin dapat menambah, mengedit, dan menghapus produk.
+- **Wishlist**: Pengguna dapat menyimpan produk favorit.
+- **Halaman Autentikasi**: Sistem login dan registrasi untuk pengguna dan admin.
+- **Manajemen Kategori & FAQ**: Admin dapat mengelola kategori produk dan pertanyaan umum.
+
+## **Teknologi yang Digunakan**
+
+- **Frontend**: React.js + Tailwind CSS
+- **Backend**: Supabase
+- **State Management**: Zustand
+- **Deployment**: Vercel
